@@ -1,0 +1,1 @@
+export { generatePnach } from './generator';
