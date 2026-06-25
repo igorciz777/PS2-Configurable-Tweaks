@@ -201,6 +201,76 @@
   padding: 0.65rem 0.85rem;
 }
 
+/* ─── Tag Groups ─── */
+.tag-group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.tag-group:hover {
+  border-color: var(--border-hover);
+}
+.tag-group + .tag-group {
+  margin-top: 0.75rem;
+}
+.tag-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+.tag-group-header:hover {
+  background: rgba(0, 212, 255, 0.05);
+}
+.tag-group-arrow {
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  transition: transform 0.15s;
+  width: 10px;
+  flex-shrink: 0;
+}
+.tag-group-arrow.open {
+  color: var(--accent);
+}
+.tag-group-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-bright);
+}
+.tag-group-body {
+  display: flex;
+  flex-direction: column;
+}
+.tag-group-body > .tag-group {
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
+}
+.tag-group-body > .tag-group + .tag-group {
+  border-top: 1px solid var(--border);
+}
+.tag-group-body > .field-card {
+  border: none;
+  border-radius: 0;
+}
+.tag-group-body > .field-card + .field-card {
+  border-top: 1px solid var(--border);
+}
+.tag-group-body > .field-card:hover {
+  box-shadow: none;
+}
+.tag-group-body > .field-card:last-child {
+  border-bottom: none;
+}
+
 /* ─── Range Slider ─── */
 .custom-range {
   -webkit-appearance: none;

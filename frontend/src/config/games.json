@@ -12,7 +12,7 @@
               "type": "percent",
               "id": "smoothing",
               "label": "Steering Smoothing",
-              "tag": "Steering Tuning",
+              "tag": "Steering/Steering Tuning",
               "comment": "Adjust steering filtering and reduction response",
               "author": "igorciz777",
               "min": 0.0020825,
@@ -28,7 +28,7 @@
               "type": "percent",
               "id": "reduction",
               "label": "Steering Reduction Effect",
-              "tag": "Steering Tuning",
+              "tag": "Steering/Steering Tuning",
               "min": 0,
               "max": 7200,
               "default": 3600,
@@ -42,7 +42,8 @@
               "type": "deadzone",
               "id": "steeringDeadzone",
               "label": "Steering Deadzone",
-              "comment": "Steering deadzone curve (low/mid/high control points)",
+              "tag": "Steering/Steering Deadzone",
+              "comment": "Configure steering deadzone response curve",
               "axis": "steering",
               "ranges": {
                 "low": { "min": 0, "max": 1, "default": 0.1, "step": 0.01 },
@@ -72,6 +73,7 @@
               "type": "deadzone",
               "id": "throttleDeadzone",
               "label": "Throttle Deadzone",
+              "tag": "Throttle/Throttle Deadzone",
               "axis": "throttle",
               "ranges": {
                 "low": { "min": 0, "max": 1, "default": 0.1, "step": 0.01 },
@@ -104,6 +106,7 @@
               "type": "deadzone",
               "id": "brakeDeadzone",
               "label": "Brake Deadzone",
+              "tag": "Brake/Brake Deadzone",
               "axis": "brake",
               "ranges": {
                 "low": { "min": 0, "max": 1, "default": 0.1, "step": 0.01 },

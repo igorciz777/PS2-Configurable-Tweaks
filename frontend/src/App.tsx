@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTweaksState } from './hooks/useTweaksState';
 import { generatePnach } from './pnach';
 import { GameSelector } from './components/GameSelector';
-import { FieldRenderer } from './components/fields/FieldRenderer';
+import { TagGroup } from './components/TagGroup';
 import { DeadzoneChart } from './components/DeadzoneChart';
 import { PnachOutput } from './components/PnachOutput';
 import { ActionButtons } from './components/ActionButtons';
@@ -51,16 +51,13 @@ export default function App() {
           <GameSelector value={gameKey} onChange={switchGame} />
 
           <div className="fields-list">
-            {config.fields.map(field => (
-              <FieldRenderer
-                key={field.id}
-                field={field}
-                values={values}
-                onSetValue={setValue}
-                getPercent={getPercent}
-                onUpdatePercent={updatePercent}
-              />
-            ))}
+            <TagGroup
+              fields={config.fields}
+              values={values}
+              onSetValue={setValue}
+              getPercent={getPercent}
+              onUpdatePercent={updatePercent}
+            />
           </div>
         </aside>
 
