@@ -15,6 +15,7 @@ export class DeadzoneField extends FieldConfig {
   readonly tag: string;
   readonly comment: string;
   readonly author: string;
+  readonly help: string;
   readonly axis: string;
   readonly ranges: { low: RangeDef; mid: RangeDef; high: RangeDef };
   readonly writes: {
@@ -33,6 +34,7 @@ export class DeadzoneField extends FieldConfig {
     this.tag = (data.tag as string) ?? '';
     this.comment = (data.comment as string) ?? '';
     this.author = (data.author as string) ?? '';
+    this.help = (data.help as string) ?? '';
     this.axis = data.axis as string;
     this.ranges = data.ranges as { low: RangeDef; mid: RangeDef; high: RangeDef };
     this.writes = (data.writes as DeadzoneField['writes']) ?? {};

@@ -7,6 +7,7 @@ export class ColorField extends FieldConfig {
   readonly tag: string;
   readonly comment: string;
   readonly author: string;
+  readonly help: string;
   readonly default: string;
   readonly writes: ValueWrite[];
 
@@ -17,6 +18,7 @@ export class ColorField extends FieldConfig {
     this.tag = (data.tag as string) ?? '';
     this.comment = (data.comment as string) ?? '';
     this.author = (data.author as string) ?? '';
+    this.help = (data.help as string) ?? '';
     this.default = (data.default as string) ?? '#ffffff';
     this.writes = data.writes as ValueWrite[];
   }

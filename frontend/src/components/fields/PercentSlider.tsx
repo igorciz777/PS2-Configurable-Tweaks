@@ -1,5 +1,8 @@
+import type { ReactNode } from 'react';
+
 interface PercentSliderProps {
   label: string;
+  helpEl?: ReactNode;
   percent: number;
   gameValue: number;
   valueMin: number;
@@ -10,13 +13,14 @@ interface PercentSliderProps {
 }
 
 export function PercentSlider({
-  label, percent, gameValue, valueMin, valueMax, valueStep,
+  label, helpEl, percent, gameValue, valueMin, valueMax, valueStep,
   onPercentChange, onGameValueChange,
 }: PercentSliderProps) {
   return (
     <div className="field-card">
       <div className="field-card-header">
         <span className="field-label">{label}</span>
+        {helpEl}
         <span className="field-percent">{Math.round(percent)}%</span>
       </div>
       <div className="field-body">

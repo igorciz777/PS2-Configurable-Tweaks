@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { RangeSlider } from '../RangeSlider';
 
 interface RangeDef {
@@ -9,6 +10,7 @@ interface RangeDef {
 
 interface DeadzoneGroupProps {
   title: string;
+  helpEl?: ReactNode;
   low: RangeDef;
   mid: RangeDef;
   high: RangeDef;
@@ -18,13 +20,14 @@ interface DeadzoneGroupProps {
 }
 
 export function DeadzoneGroup({
-  title, low, mid, high,
+  title, helpEl, low, mid, high,
   onLowChange, onMidChange, onHighChange,
 }: DeadzoneGroupProps) {
   return (
     <div className="field-card">
       <div className="field-card-header">
         <span className="field-label">{title}</span>
+        {helpEl}
       </div>
       <div className="field-body">
         <RangeSlider label="Low" min={low.min} max={low.max} step={low.step}

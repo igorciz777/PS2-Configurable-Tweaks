@@ -7,6 +7,7 @@ export class BooleanField extends FieldConfig {
   readonly tag: string;
   readonly comment: string;
   readonly author: string;
+  readonly help: string;
   readonly default: boolean;
   readonly onWrites: ValueWrite[];
   readonly offWrites: ValueWrite[];
@@ -18,6 +19,7 @@ export class BooleanField extends FieldConfig {
     this.tag = (data.tag as string) ?? '';
     this.comment = (data.comment as string) ?? '';
     this.author = (data.author as string) ?? '';
+    this.help = (data.help as string) ?? '';
     this.default = (data.default as boolean) ?? false;
     this.onWrites = (data.onWrites as ValueWrite[]) ?? [];
     this.offWrites = (data.offWrites as ValueWrite[]) ?? [];

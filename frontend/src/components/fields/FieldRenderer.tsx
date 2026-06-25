@@ -1,16 +1,12 @@
 import type { FieldConfig, TweakValues, TweakValue } from '../../fields';
-import { PercentField } from '../../fields';
-import { BooleanField } from '../../fields';
-import { DeadzoneField } from '../../fields';
-import { FloatField } from '../../fields';
-import { IntegerField } from '../../fields';
-import { ColorField } from '../../fields';
+import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField } from '../../fields';
 import { PercentSlider } from './PercentSlider';
 import { CheckboxField } from './CheckboxField';
 import { DeadzoneGroup } from './DeadzoneGroup';
 import { FloatSlider } from './FloatSlider';
 import { IntegerSlider } from './IntegerSlider';
 import { ColorPickerField } from './ColorPicker';
+import { HelpIcon, HelpTooltip } from '../HelpTooltip';
 
 interface FieldRendererProps {
   field: FieldConfig;
@@ -21,6 +17,13 @@ interface FieldRendererProps {
 }
 
 export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdatePercent }: FieldRendererProps) {
+  const helpEl = field.help ? (
+    <>
+      <HelpIcon id={field.id} />
+      <HelpTooltip id={field.id} help={field.help} />
+    </>
+  ) : null;
+
   switch (field.type) {
     case 'percent': {
       const f = field as PercentField;
@@ -28,6 +31,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <PercentSlider
           label={f.label}
+          helpEl={helpEl}
           percent={getPercent(f.id)}
           gameValue={val}
           valueMin={f.min}
@@ -45,6 +49,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <CheckboxField
           label={f.label}
+          helpEl={helpEl}
           checked={checked}
           onChange={() => onSetValue(f.id, !checked)}
         />
@@ -60,6 +65,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <DeadzoneGroup
           title={f.label}
+          helpEl={helpEl}
           low={{ min: f.ranges.low.min, max: f.ranges.low.max, step: f.ranges.low.step, value: low }}
           mid={{ min: f.ranges.mid.min, max: f.ranges.mid.max, step: f.ranges.mid.step, value: mid }}
           high={{ min: f.ranges.high.min, max: f.ranges.high.max, step: f.ranges.high.step, value: high }}
@@ -76,6 +82,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <FloatSlider
           label={f.label}
+          helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
           value={val}
           onChange={v => onSetValue(f.id, v)}
@@ -89,6 +96,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <IntegerSlider
           label={f.label}
+          helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
           value={val}
           onChange={v => onSetValue(f.id, v)}
@@ -101,6 +109,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       return (
         <ColorPickerField
           label={f.label}
+          helpEl={helpEl}
           value={f.getColorValue(values)}
           onChange={v => onSetValue(f.id, v)}
         />
@@ -108,6 +117,6 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
     }
 
     default:
-      return <div className="field-card">Unknown field type: {field.type}</div>;
+      return null;
   }
 }

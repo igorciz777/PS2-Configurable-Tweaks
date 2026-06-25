@@ -201,6 +201,17 @@
   padding: 0.65rem 0.85rem;
 }
 
+/* ─── Help Icon (inline) ─── */
+.help-icon-inline {
+  flex-shrink: 0;
+  cursor: help;
+  color: var(--text-dim);
+  transition: color 0.15s;
+}
+.help-icon-inline:hover {
+  color: var(--accent);
+}
+
 /* ─── Tag Groups ─── */
 .tag-group {
   border: 1px solid var(--border);

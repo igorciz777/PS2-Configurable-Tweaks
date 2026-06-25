@@ -1,14 +1,18 @@
+import type { ReactNode } from 'react';
+
 interface ColorPickerFieldProps {
   label: string;
+  helpEl?: ReactNode;
   value: string;
   onChange: (v: string) => void;
 }
 
-export function ColorPickerField({ label, value, onChange }: ColorPickerFieldProps) {
+export function ColorPickerField({ label, helpEl, value, onChange }: ColorPickerFieldProps) {
   return (
     <div className="field-card">
       <div className="field-card-header">
         <span className="field-label">{label}</span>
+        {helpEl}
       </div>
       <div className="field-body color-picker-body">
         <input

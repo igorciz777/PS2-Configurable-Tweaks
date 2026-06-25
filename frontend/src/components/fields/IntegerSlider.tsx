@@ -1,7 +1,9 @@
+import type { ReactNode } from 'react';
 import { RangeSlider } from '../RangeSlider';
 
 interface IntegerSliderProps {
   label: string;
+  helpEl?: ReactNode;
   min: number;
   max: number;
   step: number;
@@ -9,11 +11,12 @@ interface IntegerSliderProps {
   onChange: (v: number) => void;
 }
 
-export function IntegerSlider({ label, min, max, step, value, onChange }: IntegerSliderProps) {
+export function IntegerSlider({ label, helpEl, min, max, step, value, onChange }: IntegerSliderProps) {
   return (
     <div className="field-card">
       <div className="field-card-header">
         <span className="field-label">{label}</span>
+        {helpEl}
       </div>
       <div className="field-body">
         <RangeSlider label={label} min={min} max={max} step={step} value={value} onChange={onChange} />

@@ -27,6 +27,7 @@ export interface FieldData {
   tag?: string;
   comment?: string;
   author?: string;
+  help?: string;
   [key: string]: unknown;
 }
 
@@ -40,6 +41,7 @@ export abstract class FieldConfig {
   abstract readonly tag: string;
   abstract readonly comment: string;
   abstract readonly author: string;
+  abstract readonly help: string;
 
   abstract getStateKeys(): string[];
   abstract getDefaults(): TweakValues;

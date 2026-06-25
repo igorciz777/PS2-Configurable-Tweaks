@@ -7,6 +7,7 @@ export class IntegerField extends FieldConfig {
   readonly tag: string;
   readonly comment: string;
   readonly author: string;
+  readonly help: string;
   readonly min: number;
   readonly max: number;
   readonly default: number;
@@ -20,6 +21,7 @@ export class IntegerField extends FieldConfig {
     this.tag = (data.tag as string) ?? '';
     this.comment = (data.comment as string) ?? '';
     this.author = (data.author as string) ?? '';
+    this.help = (data.help as string) ?? '';
     this.min = data.min as number;
     this.max = data.max as number;
     this.default = data.default as number;
