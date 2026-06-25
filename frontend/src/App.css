@@ -375,6 +375,35 @@
   color: var(--text-dim);
 }
 
+/* ─── Color Picker ─── */
+.color-picker-body {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.color-picker-input {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px;
+  background: var(--bg-input);
+  cursor: pointer;
+}
+.color-hex-input {
+  flex: 1;
+  padding: 0.35rem 0.6rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.color-hex-input:focus { border-color: var(--accent); }
+
 /* ─── Responsive ─── */
 @media (max-width: 900px) {
   .app-main {

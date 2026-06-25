@@ -2,18 +2,23 @@ import { useMemo } from 'react';
 import { useTweaksState } from './hooks/useTweaksState';
 import { generatePnach } from './pnach';
 import { GameSelector } from './components/GameSelector';
-import { DynamicField } from './components/DynamicField';
+import { FieldRenderer } from './components/fields/FieldRenderer';
 import { DeadzoneChart } from './components/DeadzoneChart';
 import { PnachOutput } from './components/PnachOutput';
 import { ActionButtons } from './components/ActionButtons';
+import type { DeadzoneField } from './fields';
 import './App.css';
+
+const CHART_COLORS: Record<string, string> = {
+  steering: '#00d4ff', throttle: '#00ff88', brake: '#ff6b6b',
+};
 
 export default function App() {
   const { gameKey, config, values, switchGame, setValue, reset, getPercent, updatePercent } =
     useTweaksState();
 
   const pnachContent = useMemo(
-    () => config ? generatePnach(config, values) : '',
+    () => config ? generatePnach(config.fields, values, config.label, config.filename) : '',
     [config, values],
   );
 
@@ -21,7 +26,7 @@ export default function App() {
     return (
       <div className="app">
         <header className="app-header">
-          <h1>PS2 Controller Tweaks</h1>
+          <h1>PS2 Configurable Tweaks</h1>
         </header>
         <main className="app-main">
           <p className="empty-state">No game config found for key: {gameKey}</p>
@@ -30,14 +35,13 @@ export default function App() {
     );
   }
 
-  const deadzoneFields = config.fields.filter(f => f.type === 'deadzone');
-  const chartColors: Record<string, string> = { steering: '#00d4ff', throttle: '#00ff88', brake: '#ff6b6b' };
+  const deadzoneFields = config.fields.filter((f): f is DeadzoneField => f.type === 'deadzone');
 
   return (
     <div className="app">
       <header className="app-header">
         <div className="header-content">
-          <h1>PS2 Controller Tweaks</h1>
+          <h1>PS2 Configurable Tweaks</h1>
           <p className="header-sub">Generate custom .pnach controller patches for PS2 racing games</p>
         </div>
       </header>
@@ -48,7 +52,7 @@ export default function App() {
 
           <div className="fields-list">
             {config.fields.map(field => (
-              <DynamicField
+              <FieldRenderer
                 key={field.id}
                 field={field}
                 values={values}
@@ -67,7 +71,7 @@ export default function App() {
               <div className="charts-grid">
                 {deadzoneFields.map(field => {
                   const a = field.axis;
-                  const color = chartColors[a] || '#888';
+                  const color = CHART_COLORS[a] || '#888';
                   return (
                     <DeadzoneChart
                       key={field.id}

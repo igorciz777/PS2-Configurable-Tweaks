@@ -1,7 +1,12 @@
-import type { RangeConfig } from '../types/gameConfig';
+interface PercentRange {
+  min: number;
+  max: number;
+  value: string;
+  isInverse: boolean;
+}
 
 export function getValueFromPercentage(
-  range: RangeConfig,
+  range: PercentRange,
   percent: number,
   percentMax = 100,
 ): number {
@@ -29,7 +34,7 @@ export function getValueFromPercentage(
 }
 
 export function getPercentageFromValue(
-  range: RangeConfig,
+  range: PercentRange,
   value: number,
 ): number {
   const { min, max } = range;
@@ -58,5 +63,3 @@ export function getPercentageFromValue(
   const pct = denom === 0 ? halfMax : halfMax + ((defaultVal - clampedValue) / denom) * halfMax;
   return parseFloat(pct.toFixed(8));
 }
-
-
