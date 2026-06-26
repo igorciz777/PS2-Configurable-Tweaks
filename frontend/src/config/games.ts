@@ -1,15 +1,10 @@
 import { FieldConfig } from '../fields';
 import type { FieldData } from '../fields';
-import gamesData from './games.json';
-
-interface GroupData {
-  label: string;
-  games: GameData[];
-}
 
 interface GameData {
   id: string;
   label: string;
+  group: string;
   filename: string;
   fields: FieldData[];
 }
@@ -22,22 +17,30 @@ export interface GameEntry {
   fields: FieldConfig[];
 }
 
+const gameModules = import.meta.glob<GameData>('./games/**/*.json', { eager: true, import: 'default' });
+
 const parsed: GameEntry[] = [];
 const byId: Record<string, GameEntry> = {};
-const groups: { label: string; games: GameEntry[] }[] = [];
+const groupsMap = new Map<string, GameEntry[]>();
 
-for (const grp of (gamesData as { groups: GroupData[] }).groups) {
-  const entries: GameEntry[] = [];
-  for (const g of grp.games) {
-    const fields = g.fields.map(fd => FieldConfig.fromJSON(fd));
-    const entry: GameEntry = {
-      id: g.id, label: g.label, filename: g.filename, group: grp.label, fields,
-    };
-    parsed.push(entry);
-    byId[g.id] = entry;
-    entries.push(entry);
+for (const data of Object.values(gameModules)) {
+  const fields = data.fields.map(fd => FieldConfig.fromJSON(fd));
+  const entry: GameEntry = {
+    id: data.id, label: data.label, filename: data.filename, group: data.group, fields,
+  };
+  parsed.push(entry);
+  byId[data.id] = entry;
+  const list = groupsMap.get(data.group);
+  if (list) {
+    list.push(entry);
+  } else {
+    groupsMap.set(data.group, [entry]);
   }
-  groups.push({ label: grp.label, games: entries });
+}
+
+const groups: { label: string; games: GameEntry[] }[] = [];
+for (const [label, games] of groupsMap) {
+  groups.push({ label, games });
 }
 
 export const allGames: GameEntry[] = parsed;

@@ -10,13 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.1",
     "chart.js": "^4.5.1",
+    "motion": "^12.42.0",
+    "postcss": "^8.5.15",
     "react": "^19.2.7",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.7",
     "react-markdown": "^10.1.0",
     "react-tooltip": "^6.0.8",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "tailwindcss": "^4.3.1"
   },
   "devDependencies": {
     "@types/node": "^24.13.2",

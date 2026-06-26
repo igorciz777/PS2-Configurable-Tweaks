@@ -1,0 +1,168 @@
+{
+  "id": "rbc1",
+  "label": "Racing Battle C1 Grand Prix",
+  "group": "RACING BATTLE C1 Grand Prix",
+  "filename": "SLPM-65897_1C087362.pnach",
+  "fields": [
+    {
+      "type": "percent",
+      "id": "smoothing",
+      "label": "Steering Smoothing",
+      "min": 1,
+      "max": 60,
+      "default": 30,
+      "step": 1,
+      "isInverse": false,
+      "writes": [
+        {
+          "address": "1020C0CC",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "percent",
+      "id": "reduction",
+      "label": "Steering Reduction Effect",
+      "min": 0,
+      "max": 7.2,
+      "default": 3.6,
+      "step": 0.1,
+      "isInverse": false,
+      "writes": [
+        {
+          "address": "101761a4",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "deadzone",
+      "id": "steeringDeadzone",
+      "label": "Steering Deadzone",
+      "axis": "steering",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "0049da00",
+            "type": "word",
+            "bits": "full"
+          }
+        ],
+        "high": [
+          {
+            "address": "0049da08",
+            "type": "word",
+            "bits": "full"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "throttleDeadzone",
+      "label": "Throttle Deadzone",
+      "axis": "throttle",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "0049da10",
+            "type": "word",
+            "bits": "full"
+          }
+        ],
+        "high": [
+          {
+            "address": "0049da18",
+            "type": "word",
+            "bits": "full"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "brakeDeadzone",
+      "label": "Brake Deadzone",
+      "axis": "brake",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "0049da20",
+            "type": "word",
+            "bits": "full"
+          }
+        ],
+        "high": [
+          {
+            "address": "0049da28",
+            "type": "word",
+            "bits": "full"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,219 @@
+{
+  "id": "kr1",
+  "label": "Kaido Racer (EU)",
+  "group": "Kaido Battle 2",
+  "filename": "SLES-53191_F7780E06.pnach",
+  "fields": [
+    {
+      "type": "percent",
+      "id": "smoothing",
+      "label": "Steering Smoothing",
+      "min": 0.0020825,
+      "max": 0.1666,
+      "default": 0.01666,
+      "step": 0.00001,
+      "isInverse": true,
+      "writes": [
+        {
+          "address": "101CE01C",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "percent",
+      "id": "reduction",
+      "label": "Steering Reduction Effect",
+      "min": 0,
+      "max": 7.2,
+      "default": 3.6,
+      "step": 0.1,
+      "isInverse": false,
+      "writes": [
+        {
+          "address": "1016C134",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "deadzone",
+      "id": "steeringDeadzone",
+      "label": "Steering Deadzone",
+      "axis": "steering",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101c84a8",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c84ac",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101c84c4",
+            "type": "extended",
+            "bits": "lo"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c84e0",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c84e4",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "throttleDeadzone",
+      "label": "Throttle Deadzone",
+      "axis": "throttle",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101c8a58",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c8a5c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101c8a74",
+            "type": "extended",
+            "bits": "lo"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c8a90",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c8a94",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "brakeDeadzone",
+      "label": "Brake Deadzone",
+      "axis": "brake",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101c8b20",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c8b24",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101c8b3c",
+            "type": "extended",
+            "bits": "lo"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c8b58",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c8b5c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    }
+  ]
+}

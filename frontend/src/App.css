@@ -144,7 +144,7 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
-  background: rgba(0, 212, 255, 0.04);
+  background: rgba(16, 16, 36, 0.95);
   position: sticky;
   top: 0;
 }

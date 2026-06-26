@@ -1,0 +1,284 @@
+{
+  "id": "kb1kr",
+  "label": "Kaido Battle 1 (KR)",
+  "group": "Kaido Battle 1",
+  "filename": "SLKA-25063_E3795E39.pnach",
+  "fields": [
+    {
+      "type": "percent",
+      "id": "smoothing",
+      "label": "Steering Smoothing",
+      "min": 0.0020825,
+      "max": 0.0625,
+      "default": 0.01666,
+      "step": 0.00001,
+      "isInverse": true,
+      "writes": [
+        {
+          "address": "1018f9d0",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "percent",
+      "id": "reduction",
+      "label": "Steering Reduction Effect",
+      "min": 0,
+      "max": 7200,
+      "default": 3600,
+      "step": 100,
+      "isInverse": false,
+      "writes": [
+        {
+          "address": "101b4340",
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "deadzone",
+      "id": "steeringDeadzone",
+      "label": "Steering Deadzone",
+      "axis": "steering",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101bffc0",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bffc4",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101bffec",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bfff0",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c0010",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c0014",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "highMinusMid": [
+          {
+            "address": "101c0048",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c004c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "throttleDeadzone",
+      "label": "Throttle Deadzone",
+      "axis": "throttle",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101bfe28",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bfe2c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101bfe34",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bfe38",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c0010",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c0014",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "highMinusMid": [
+          {
+            "address": "101c0048",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c004c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "address": "001bfe20",
+          "type": "word",
+          "hex": "00000000"
+        }
+      ]
+    },
+    {
+      "type": "deadzone",
+      "id": "brakeDeadzone",
+      "label": "Brake Deadzone",
+      "axis": "brake",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": "101bfaf8",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bfafc",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": "101bfb04",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101bfb08",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": "101c0010",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c0014",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "highMinusMid": [
+          {
+            "address": "101c0048",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c004c",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      },
+      "patches": [
+        {
+          "address": "001bfaf0",
+          "type": "word",
+          "hex": "00000000"
+        }
+      ]
+    }
+  ]
+}
