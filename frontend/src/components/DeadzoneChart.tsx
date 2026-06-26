@@ -16,6 +16,23 @@ interface DeadzoneChartProps {
   high: number;
 }
 
+const chartStyle = {
+  background: 'rgba(14,16,38,0.4)',
+  border: '1px solid rgba(80,90,160,0.1)',
+  borderRadius: '8px',
+  padding: '16px',
+};
+const titleStyle = {
+  textAlign: 'center' as const,
+  fontFamily: "'JetBrains Mono', monospace",
+  fontSize: '0.55rem',
+  fontWeight: 600,
+  letterSpacing: '0.05em',
+  color: '#6a6e94',
+  textTransform: 'uppercase' as const,
+  marginBottom: '12px',
+};
+
 export function DeadzoneChart({
   title, color, low, mid, high,
 }: DeadzoneChartProps) {
@@ -24,21 +41,23 @@ export function DeadzoneChart({
     Array.from({ length: 101 }, (_, i) => parseFloat((i / 100).toFixed(2))), []);
 
   return (
-    <div className="chart-card">
-      <div className="chart-title">{title}</div>
-      <Line
-        data={{ labels, datasets: [{ data, borderColor: color, borderWidth: 2, pointRadius: 0, fill: false }] }}
-        options={{
-          responsive: true,
-          animation: false,
-          aspectRatio: 1,
-          scales: {
-            x: { display: true, min: 0, max: 1, grid: { color: '#ffffff15' }, ticks: { color: '#8888aa' } },
-            y: { display: true, min: 0, max: 1, grid: { color: '#ffffff15' }, ticks: { color: '#8888aa' } },
-          },
-          plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        }}
-      />
+    <div style={chartStyle}>
+      <div style={titleStyle}>{title}</div>
+      <div className="chart-card">
+        <Line
+          data={{ labels, datasets: [{ data, borderColor: color, borderWidth: 1.5, pointRadius: 0, fill: false }] }}
+          options={{
+            responsive: true,
+            animation: false,
+            aspectRatio: 1,
+            scales: {
+              x: { display: true, min: 0, max: 1, grid: { color: '#ffffff08' }, ticks: { color: '#6a6e94', font: { size: 8 } } },
+              y: { display: true, min: 0, max: 1, grid: { color: '#ffffff08' }, ticks: { color: '#6a6e94', font: { size: 8 } } },
+            },
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -20,17 +20,15 @@ const components = {
 };
 
 export function HelpIcon({ id }: { id: string }) {
-  const iconId = `help-svg-${id}`;
   return (
     <svg
       data-tooltip-id={id}
-      id={iconId}
       className="help-icon-inline"
-      width="18" height="18" viewBox="0 0 18 18"
+      width="16" height="16" viewBox="0 0 16 16"
       fill="none"
     >
-      <circle cx="9" cy="9" r="8" stroke="currentColor" strokeWidth="1.5" fill="none" opacity="0.7" />
-      <text x="9" y="13" textAnchor="middle" fill="currentColor" fontSize="13" fontWeight="bold" opacity="0.7">
+      <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.2" fill="none" />
+      <text x="8" y="11.5" textAnchor="middle" fill="currentColor" fontSize="11" fontWeight="bold">
         ?
       </text>
     </svg>
@@ -46,17 +44,17 @@ export function HelpTooltip({ id, help }: HelpTooltipProps) {
       clickable
       opacity={1}
       style={{
-        maxWidth: '520px',
+        maxWidth: '480px',
         maxHeight: '360px',
         overflowY: 'auto',
-        padding: '0.75rem',
+        padding: '0.75rem 1rem',
         fontSize: '0.8rem',
-        lineHeight: '1.5',
-        background: '#151530',
-        border: '1px solid rgba(255,255,255,0.08)',
+        lineHeight: '1.6',
+        background: '#0e1026',
+        border: '1px solid rgba(74, 125, 255, 0.15)',
         borderRadius: '10px',
         boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-        color: '#c8c8e0',
+        color: '#c0c4d8',
         zIndex: 200,
       }}
     >

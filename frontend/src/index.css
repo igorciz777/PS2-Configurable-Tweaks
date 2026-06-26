@@ -1,29 +1,32 @@
-*, *::before, *::after {
+@import "tailwindcss";
+
+@theme {
+  --color-bg-deep: #090a1a;
+  --color-bg-surface: rgba(12, 14, 34, 0.92);
+  --color-bg-card: rgba(14, 16, 38, 0.7);
+  --color-bg-input: rgba(8, 9, 24, 0.6);
+  --color-border-subtle: rgba(80, 90, 160, 0.15);
+  --color-border-hover: rgba(80, 90, 160, 0.3);
+  --color-text-primary: #c0c4d8;
+  --color-text-dim: #6a6e94;
+  --color-text-bright: #e0e4f0;
+  --color-accent: #4a7dff;
+  --color-accent-dim: rgba(74, 125, 255, 0.25);
+  --color-green: #40c080;
+  --color-red: #d06060;
+  --color-orange: #d09040;
+  --font-sans: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --radius-card: 10px;
+  --radius-sm: 6px;
+}
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-:root {
-  --bg-primary: #0a0a1a;
-  --bg-surface: rgba(16, 16, 36, 0.85);
-  --bg-card: rgba(22, 22, 50, 0.7);
-  --bg-input: rgba(10, 10, 30, 0.6);
-  --border: rgba(100, 100, 180, 0.2);
-  --border-hover: rgba(100, 100, 180, 0.4);
-  --text: #c8c8e0;
-  --text-dim: #6868aa;
-  --text-bright: #e8e8ff;
-  --accent: #00d4ff;
-  --accent-glow: rgba(0, 212, 255, 0.3);
-  --green: #00ff88;
-  --red: #ff6b6b;
-  --orange: #ffa94d;
-  --purple: #a855f7;
-  --font: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
-  --radius: 12px;
-  --radius-sm: 8px;
 }
 
 html {
@@ -31,10 +34,9 @@ html {
 }
 
 body {
-  font-family: var(--font);
-  background: var(--bg-primary);
-  color: var(--text);
-  line-height: 1.5;
+  background: #090a1a;
+  color: var(--color-text-primary);
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
 }
@@ -43,17 +45,29 @@ body {
   min-height: 100vh;
 }
 
-input, textarea, select, button {
+input,
+textarea,
+select,
+button {
   font-family: inherit;
   font-size: inherit;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 ::selection {
-  background: var(--accent);
-  color: #000;
+  background: rgba(74, 125, 255, 0.3);
+  color: #fff;
 }
+
+:root {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.08); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.15); }
