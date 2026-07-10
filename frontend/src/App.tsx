@@ -106,7 +106,7 @@ export default function App() {
           )}
 
           <div
-            className="flex-1 flex flex-col p-6 rounded-xl border"
+            className="flex flex-col p-6 rounded-xl border"
             style={{ background: 'rgba(14,16,38,0.5)', borderColor: 'rgba(80,90,160,0.12)' }}
           >
             <h3

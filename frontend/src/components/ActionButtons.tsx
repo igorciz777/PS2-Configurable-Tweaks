@@ -57,6 +57,15 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: Ac
         Download .pnach
       </button>
       <button
+        style={btnPrimary}
+        onMouseEnter={e => { e.currentTarget.style.background = '#5a8dff'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = '#4a7dff'; }}
+        onMouseDown={e => { e.currentTarget.style.background = '#3a6def'; }}
+        onMouseUp={e => { e.currentTarget.style.background = '#5a8dff'; }}
+      >
+        Apply .pnach to ISO
+      </button>
+      <button
         style={btnSecondary}
         onMouseEnter={e => {
           e.currentTarget.style.background = 'rgba(14,16,38,0.8)';
