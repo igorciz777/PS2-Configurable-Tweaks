@@ -44,7 +44,7 @@ export function GameSelector({ value, onChange }: GameSelectorProps) {
   return (
     <div className="relative">
       <label
-        className="block font-mono text-xs font-semibold uppercase mb-2.5"
+        className="block font-mono text-xs font-semibold uppercase mb-2.5 pl-5"
         style={{ color: '#6a6e94', letterSpacing: '0.1em' }}
       >
         Game Selection

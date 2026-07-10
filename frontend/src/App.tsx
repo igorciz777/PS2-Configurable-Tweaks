@@ -62,7 +62,7 @@ export default function App() {
         {/* ── Sidebar ── */}
         <aside className="flex flex-col gap-5" style={{ width: '380px', minWidth: '320px', flexShrink: 0 }}>
           <GameSelector value={gameKey} onChange={switchGame} />
-          <div className="flex-1 overflow-y-auto space-y-3" style={{ paddingRight: '6px' }}>
+          <div className="flex-1 overflow-y-auto space-y-3 px-4" style={{ paddingRight: 'calc(0.25rem + 6px)' }}>
             <TagGroup
               fields={config.fields}
               values={values}

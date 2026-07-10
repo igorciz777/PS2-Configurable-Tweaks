@@ -102,7 +102,7 @@ function TreeNodeRow({
       </div>
 
       {open && (
-        <div style={{ padding: '14px 14px 10px 14px' }}>
+        <div style={{ padding: '16px' }}>
           <div className="space-y-3">
             {node.fields.map(field => (
               <FieldRenderer
