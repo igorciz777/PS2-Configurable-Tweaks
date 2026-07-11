@@ -46,14 +46,10 @@ pub fn find_elf_in_iso(iso_data: &[u8]) -> Result<ElfFileInfo, String> {
     }
 
     let root_data = &iso_data[root_start..root_end];
-    parse_directory_entries(root_data, root_extent, iso_data)
+    parse_directory_entries(root_data)
 }
 
-fn parse_directory_entries(
-    dir_data: &[u8],
-    _dir_extent: u32,
-    iso_data: &[u8],
-) -> Result<ElfFileInfo, String> {
+fn parse_directory_entries(dir_data: &[u8]) -> Result<ElfFileInfo, String> {
     let mut offset: usize = 0;
 
     while offset < dir_data.len() {
@@ -67,7 +63,6 @@ fn parse_directory_entries(
             break;
         }
 
-        let file_flags = dir_data[offset + 25];
         let name_len = dir_data[offset + 32] as usize;
 
         if offset + 33 + name_len > dir_data.len() {
@@ -76,11 +71,7 @@ fn parse_directory_entries(
 
         let name_bytes = &dir_data[offset + 33..offset + 33 + name_len];
 
-        // Check if this is an ELF file matching PS2 naming convention:
-        // 13 chars, starts with s/S, 4th char is '_'
-        let is_ps2_elf = is_ps2_elf_name(name_bytes);
-
-        if is_ps2_elf {
+        if is_ps2_elf_name(name_bytes) {
             let file_extent = read_u32_le(dir_data, offset + 2);
             let file_size = read_u32_le(dir_data, offset + 10);
             let file_offset = (file_extent as u64) * SECTOR_SIZE;
@@ -89,23 +80,6 @@ fn parse_directory_entries(
                 offset: file_offset,
                 size: file_size,
             });
-        }
-
-        // If this is a subdirectory (not . or ..), recurse into it
-        if file_flags & 0x02 != 0 && name_len > 0 && !is_dot_or_dotdot(name_bytes) {
-            let sub_extent = read_u32_le(dir_data, offset + 2);
-            let sub_size = read_u32_le(dir_data, offset + 10);
-            let sub_offset = (sub_extent as u64) * SECTOR_SIZE;
-            let sub_start = sub_offset as usize;
-            let sub_end = sub_start + sub_size as usize;
-
-            if sub_end <= iso_data.len() {
-                if let Ok(info) =
-                    parse_directory_entries(&iso_data[sub_start..sub_end], sub_extent, iso_data)
-                {
-                    return Ok(info);
-                }
-            }
         }
 
         offset += entry_len;
@@ -151,6 +125,4 @@ fn is_ps2_elf_name(name: &[u8]) -> bool {
     true
 }
 
-fn is_dot_or_dotdot(name: &[u8]) -> bool {
-    name == b"." || name == b".." || name == b"\x00"
-}
+

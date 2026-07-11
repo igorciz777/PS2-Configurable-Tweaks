@@ -1,15 +1,27 @@
-import { useCallback, useRef, useState } from 'react';
-import init, { compute_iso_patches } from '../wasm/wasm_patcher.js';
+import { useCallback, useState } from 'react';
 
 interface ActionButtonsProps {
   pnachContent: string;
   filename: string;
   gameLabel: string;
   onReset: () => void;
+  onApplyToIso: (pnachContent: string) => void;
 }
 
 const btnPrimary = {
   background: '#4a7dff',
+  color: '#fff',
+  padding: '12px 32px',
+  borderRadius: '8px',
+  fontSize: '0.875rem',
+  fontWeight: 500,
+  border: 'none',
+  cursor: 'pointer',
+  transition: 'background 0.15s',
+};
+
+const btnApply = {
+  background: '#d09040',
   color: '#fff',
   padding: '12px 32px',
   borderRadius: '8px',
@@ -32,20 +44,7 @@ const btnSecondary = {
   transition: 'background 0.15s, border-color 0.15s',
 };
 
-let wasmReady = false;
-let wasmInitPromise: Promise<void> | null = null;
-
-async function ensureWasm(): Promise<void> {
-  if (wasmReady) return;
-  if (!wasmInitPromise) {
-    wasmInitPromise = init().then(() => { wasmReady = true; });
-  }
-  await wasmInitPromise;
-}
-
-export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: ActionButtonsProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [applying, setApplying] = useState(false);
+export function ActionButtons({ pnachContent, filename, gameLabel, onReset, onApplyToIso }: ActionButtonsProps) {
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
 
   const handleDownload = useCallback(() => {
@@ -62,88 +61,13 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: Ac
 
   const clearStatus = useCallback(() => setStatusMsg(null), []);
 
-  const handleApply = useCallback(async () => {
+  const handleApply = useCallback(() => {
     if (!pnachContent) {
       setStatusMsg('No pnach content to apply');
       return;
     }
-
-    fileInputRef.current?.click();
-  }, [pnachContent]);
-
-  const handleFileSelected = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    e.target.value = '';
-
-    setApplying(true);
-    setStatusMsg('Initializing WASM module...');
-
-    try {
-      await ensureWasm();
-      setStatusMsg(`Reading ISO: ${file.name}...`);
-
-      const isoData = new Uint8Array(await file.arrayBuffer());
-
-      setStatusMsg('Computing patch locations...');
-
-      const resultJson = compute_iso_patches(isoData, pnachContent);
-      const result = JSON.parse(resultJson);
-
-      const patches: Array<{ offset: number; value: number; size: number }> = result.patches;
-
-      if (!patches || patches.length === 0) {
-        setStatusMsg('No patches could be applied');
-        setApplying(false);
-        return;
-      }
-
-      setStatusMsg(`Applying ${patches.length} patch(es)...`);
-
-      const view = new DataView(isoData.buffer);
-      for (const p of patches) {
-        switch (p.size) {
-          case 1: view.setUint8(p.offset, p.value); break;
-          case 2: view.setUint16(p.offset, p.value, false); break;
-          case 4: view.setUint32(p.offset, p.value, false); break;
-        }
-      }
-
-      setStatusMsg(`Saving patched ISO (${patches.length} patches applied)...`);
-
-      const patchedBlob = new Blob([isoData], { type: 'application/octet-stream' });
-
-      if ('showSaveFilePicker' in window) {
-        try {
-          const fileHandle = await (window as any).showSaveFilePicker({
-            suggestedName: file.name,
-            types: [{
-              description: 'ISO File',
-              accept: { 'application/octet-stream': ['.iso'] },
-            }],
-          });
-          const writable = await fileHandle.createWritable();
-          await writable.write(patchedBlob);
-          await writable.close();
-          setStatusMsg(`Successfully patched and saved ISO`);
-        } catch (err: any) {
-          if (err.name === 'AbortError' || err.message?.includes('abort')) {
-            setStatusMsg('Save cancelled');
-          } else {
-            fallbackDownload(patchedBlob, file.name);
-            setStatusMsg(`Downloading patched ISO (fallback)`);
-          }
-        }
-      } else {
-        fallbackDownload(patchedBlob, file.name);
-        setStatusMsg(`Downloading patched ISO`);
-      }
-    } catch (err: any) {
-      setStatusMsg(`Error: ${err.message || err}`);
-    } finally {
-      setApplying(false);
-    }
-  }, [pnachContent]);
+    onApplyToIso(pnachContent);
+  }, [pnachContent, onApplyToIso]);
 
   return (
     <div className="flex flex-col gap-3">
@@ -160,26 +84,26 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: Ac
         </button>
         <button
           style={{
-            ...btnPrimary,
-            opacity: applying || !pnachContent ? 0.6 : 1,
-            cursor: applying || !pnachContent ? 'not-allowed' : 'pointer',
+            ...btnApply,
+            opacity: !pnachContent ? 0.6 : 1,
+            cursor: !pnachContent ? 'not-allowed' : 'pointer',
           }}
           onMouseEnter={e => {
-            if (!applying && pnachContent) e.currentTarget.style.background = '#5a8dff';
+            if (pnachContent) e.currentTarget.style.background = '#e0a050';
           }}
           onMouseLeave={e => {
-            e.currentTarget.style.background = '#4a7dff';
+            e.currentTarget.style.background = '#d09040';
           }}
           onMouseDown={e => {
-            if (!applying && pnachContent) e.currentTarget.style.background = '#3a6def';
+            if (pnachContent) e.currentTarget.style.background = '#c08030';
           }}
           onMouseUp={e => {
-            if (!applying && pnachContent) e.currentTarget.style.background = '#5a8dff';
+            if (pnachContent) e.currentTarget.style.background = '#e0a050';
           }}
           onClick={handleApply}
-          disabled={applying || !pnachContent}
+          disabled={!pnachContent}
         >
-          {applying ? 'Applying...' : 'Apply .pnach to ISO'}
+          Apply .pnach to ISO
         </button>
         <button
           style={btnSecondary}
@@ -195,13 +119,6 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: Ac
         >
           Reset
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".iso"
-          style={{ display: 'none' }}
-          onChange={handleFileSelected}
-        />
       </div>
       {statusMsg && (
         <div
@@ -230,15 +147,4 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset }: Ac
       )}
     </div>
   );
-}
-
-function fallbackDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename.replace(/\.iso$/i, '_patched.iso');
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
 }

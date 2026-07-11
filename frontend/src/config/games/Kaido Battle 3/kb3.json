@@ -8,6 +8,7 @@
       "type": "percent",
       "id": "smoothing",
       "label": "Steering Smoothing",
+      "tag": "Steering",
       "min": 0.004165,
       "max": 0.0833,
       "default": 0.01666,
@@ -25,6 +26,7 @@
       "type": "percent",
       "id": "reduction",
       "label": "Steering Reduction Effect",
+      "tag": "Steering",
       "min": 1,
       "max": 18,
       "default": 9,
@@ -48,6 +50,7 @@
       "type": "deadzone",
       "id": "steeringDeadzone",
       "label": "Steering Deadzone",
+      "tag": "Steering",
       "axis": "steering",
       "ranges": {
         "low": {
@@ -97,6 +100,7 @@
       "type": "deadzone",
       "id": "throttleDeadzone",
       "label": "Throttle Deadzone",
+      "tag": "Throttle",
       "axis": "throttle",
       "ranges": {
         "low": {
@@ -146,6 +150,7 @@
       "type": "deadzone",
       "id": "brakeDeadzone",
       "label": "Brake Deadzone",
+      "tag": "Brake",
       "axis": "brake",
       "ranges": {
         "low": {

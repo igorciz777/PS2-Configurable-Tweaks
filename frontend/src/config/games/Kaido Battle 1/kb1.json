@@ -8,10 +8,9 @@
       "type": "percent",
       "id": "smoothing",
       "label": "Steering Smoothing",
-      "tag": "Steering/Steering Tuning",
+      "tag": "Steering",
       "comment": "Adjust steering filtering and reduction response",
       "author": "igorciz777",
-      "help": "# Non ipse reflectitur tectus\n\n## Forma milibus naufragus\n\nLorem markdownum dicione figere Minyeidas egredior sternere puerosque vos manus, hoc suco remissis. Bobus quae eadem nomine testatus remis petebat sequimur auras per est hoc videant. *Anxia more utinam* quater, di prius at rubebant sic.\n\n\n\n\n\ndotFileWhite(tapeDigital, kbps, ethernetBare);\n\n\n\n pointScrapingCell.access -= disk_avatar_youtube(gnu_remote_bcc.webmaster_typeface(-1));\n\n\n\n if (quicktime <= 90) {\n\n\n\n\n\n\n\n xp.mediaWimaxUnit(machine_cisc_operation);\n\n\n\n } else {\n\n\n\n\n\n\n\n pad_logic_boot += 1258 + 46 + web_hypertext_optic.wildcardPanelDvd(file);\n\n\n\n\n\n\n\n namePerl(noc, analyst * inkjet_system_jsf);\n\n\n\n\n\n\n\n nicUncCommerce.http += yobibyteBank;\n\n\n\n }\n\n## Fune conceptus tanto ambobus\n\nNon vosque luctus. Non fuerat, Bacchus pyram clamato cruentior in grates `port_readme`; beati. Factum triplici formosis videret `agpInterface`, nat quae.\n\n\n\n\n\nengineCluster.client = client_interactive - radcab;\n\n\n\n if (buffer_software_nybble) {\n\n\n\n\n\n\n\n raid += ipad;\n\n\n\n } else {\n\n\n\n\n\n\n\n superscalarCompact = ssid;\n\n\n\n\n\n\n\n publishingOasisBare.megapixel(ibm_filename_kbps);\n\n\n\n }\n\n\n\n if (machine_box_raw == chip + 6) {\n\n\n\n\n\n\n\n host_software_megabit.install_bsod(interlacedRdfTrackball, 88, passive);\n\n\n\n\n\n\n\n webUnmountStreaming.illegal_click -= file_bit.goodput(partition, codeRedundancyGigo(3));\n\n\n\n } else {\n\n\n\n\n\n\n\n flat += adapter - transfer / bytePasteFirmware(username, intranetPermalinkMeta);\n\n\n\n\n\n\n\n extranet_tunneling_guid += publishing;\n\n\n\n }\n\n\n\n if (5 + aspEide <= 4) {\n\n\n\n\n\n\n\n multithreading(system, seo_motion_mp, -4);\n\n\n\n\n\n\n\n ivr.ict_basic_dial(wordStatus);\n\n\n\n\n\n\n\n ups.rtfMarket(search(5), scroll + macintosh);\n\n\n\n } else {\n\n\n\n\n\n\n\n microcomputer_symbolic.snow_lan_data = ethics;\n\n\n\n\n\n\n\n nonFreeware(2, saasCdFooter(e, fontComputingZip));\n\n\n\n }\n\n## Modo laudisque novandi remis\n\nSomnos vox cuius uvae `videoIbmSsh` sunt et incingitur esset rogando, amando attollit omnis meis pictis. Voce secum incepto fuit movi palles movere et coniunx addit deserere talibus `guid`, pedis. Verba simulati est, ferunt, genitorque animique ad Iuno in. Cum maxima, mihi? Si agam ramos cornua creberrima Ossaeae nec herbas Erecthida micante Iuno.\n\n\n\n\n\nuser(appletBlacklistNon.unix_server(sync, 3, e_io_push), 5);\n\n\n\n hsf_link = market(eide_thunderbolt, 1 + 76 * apache, -2 * card_shell(firewall, menu_surge));\n\n\n\n floppy_lossless.backupSoftwareXmp += target;\n\n\n\n barWord(clob.code_play_cpm(mpTerminal), 482137, ram_youtube_banner);\n\n\n\n blacklistBatchSearch.desktop += 5 + opacity + lteEAccess;\n\n## Solutus maestis genitoris aperti\n\nMegareus pressus gestasset totumque in ferinos stant proceres, illa hanc iuvat Nec! Funera in Mithridateisque nocte secuta `mpegLossyScroll` Pleuronius undis sonanti non: [crura Naxoque si](#solutus-maestis-genitoris-aperti) ortus. Sideraque mediis numine vincere: petit fuissem praesens ut et suorum dum exclamant ad desunt queri, dextra.\n\n- Torquet avidosque Leuconoe terris - Veneris equi - Dea sollertius umbras raptoresque pulmone - Et crimine quis superest - Et et merguntque unde",
       "min": 0.0020825,
       "max": 0.0625,
       "default": 0.01666,
@@ -29,7 +28,7 @@
       "type": "percent",
       "id": "reduction",
       "label": "Steering Reduction Effect",
-      "tag": "Steering/Steering Tuning",
+      "tag": "Steering",
       "min": 0,
       "max": 7200,
       "default": 3600,
@@ -47,7 +46,7 @@
       "type": "deadzone",
       "id": "steeringDeadzone",
       "label": "Steering Deadzone",
-      "tag": "Steering/Steering Deadzone",
+      "tag": "Steering",
       "comment": "Configure steering deadzone response curve",
       "axis": "steering",
       "ranges": {
@@ -125,7 +124,7 @@
       "type": "deadzone",
       "id": "throttleDeadzone",
       "label": "Throttle Deadzone",
-      "tag": "Throttle/Throttle Deadzone",
+      "tag": "Throttle",
       "axis": "throttle",
       "ranges": {
         "low": {
@@ -209,7 +208,7 @@
       "type": "deadzone",
       "id": "brakeDeadzone",
       "label": "Brake Deadzone",
-      "tag": "Brake/Brake Deadzone",
+      "tag": "Brake",
       "axis": "brake",
       "ranges": {
         "low": {

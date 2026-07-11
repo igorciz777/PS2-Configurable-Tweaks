@@ -103,20 +103,24 @@ function TreeNodeRow({
 
       {open && (
         <div style={{ padding: '16px' }}>
-          <div className="space-y-3">
-            {node.fields.map(field => (
-              <FieldRenderer
-                key={field.id}
-                field={field}
-                values={values}
-                onSetValue={onSetValue}
-                getPercent={getPercent}
-                onUpdatePercent={onUpdatePercent}
-              />
-            ))}
-            {node.children.map(child => (
+          {node.fields.length > 0 && (
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 mb-3">
+              {node.fields.map(field => (
+                <div key={field.id} style={field.type === 'deadzone' ? { gridColumn: '1 / -1' } : undefined}>
+                  <FieldRenderer
+                    field={field}
+                    values={values}
+                    onSetValue={onSetValue}
+                    getPercent={getPercent}
+                    onUpdatePercent={onUpdatePercent}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+          {node.children.map((child, idx) => (
+            <div key={child.fullPath} className={idx < node.children.length - 1 || node.fields.length > 0 ? 'mb-3' : ''}>
               <TreeNodeRow
-                key={child.fullPath}
                 node={child}
                 values={values}
                 onSetValue={onSetValue}
@@ -124,8 +128,8 @@ function TreeNodeRow({
                 onUpdatePercent={onUpdatePercent}
                 depth={depth + 1}
               />
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -137,7 +141,7 @@ export function TagGroup(props: TagGroupProps) {
   const { roots, ungrouped } = useMemo(() => buildTree(fields), [fields]);
 
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       {roots.map(root => (
         <TreeNodeRow
           key={root.fullPath}
@@ -149,16 +153,21 @@ export function TagGroup(props: TagGroupProps) {
           depth={0}
         />
       ))}
-      {ungrouped.map(field => (
-        <FieldRenderer
-          key={field.id}
-          field={field}
-          values={values}
-          onSetValue={onSetValue}
-          getPercent={getPercent}
-          onUpdatePercent={onUpdatePercent}
-        />
-      ))}
+      {ungrouped.length > 0 && (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
+          {ungrouped.map(field => (
+            <div key={field.id} style={field.type === 'deadzone' ? { gridColumn: '1 / -1' } : undefined}>
+              <FieldRenderer
+                field={field}
+                values={values}
+                onSetValue={onSetValue}
+                getPercent={getPercent}
+                onUpdatePercent={onUpdatePercent}
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
