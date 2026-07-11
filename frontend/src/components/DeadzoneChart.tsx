@@ -18,7 +18,7 @@ interface DeadzoneChartProps {
 
 const chartStyle = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'column' as const,
   height: '100%',
   background: 'rgba(14,16,38,0.4)',
   border: '1px solid rgba(80,90,160,0.1)',
