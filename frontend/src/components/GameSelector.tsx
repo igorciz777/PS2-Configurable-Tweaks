@@ -44,8 +44,8 @@ export function GameSelector({ value, onChange }: GameSelectorProps) {
   return (
     <div className="relative">
       <label
-        className="block font-mono text-xs font-semibold uppercase mb-2.5 pl-5"
-        style={{ color: '#6a6e94', letterSpacing: '0.1em' }}
+        className="block font-sans text-xs font-semibold uppercase mb-2.5 pl-5"
+        style={{ letterSpacing: '0.1em' }}
       >
         Game Selection
       </label>
@@ -62,7 +62,7 @@ export function GameSelector({ value, onChange }: GameSelectorProps) {
         <span style={{ color: selected ? '#e0e4f0' : '#6a6e94', fontSize: '0.875rem' }}>
           {selected?.label || 'Select a game'}
         </span>
-        <span style={{ color: '#6a6e94', fontSize: '0.5rem', letterSpacing: '0.05em' }}>▼</span>
+        <span style={{ fontSize: '0.5rem', letterSpacing: '0.05em' }}>▼</span>
       </div>
 
       {open && (
@@ -92,14 +92,14 @@ export function GameSelector({ value, onChange }: GameSelectorProps) {
           />
           <div className="overflow-y-auto flex-1">
             {filtered.length === 0 && (
-              <div className="px-6 py-10 text-center font-mono text-xs" style={{ color: '#6a6e94' }}>
+              <div className="px-6 py-10 text-center font-sans text-xs" style={{ color: '#6a6e94' }}>
                 No games match your search
               </div>
             )}
             {filtered.map(group => (
               <div key={group.label}>
                 <div
-                  className="sticky top-0 px-5 py-2.5 font-mono text-xs font-semibold uppercase"
+                  className="sticky top-0 px-5 py-2.5 font-sans text-xs font-semibold uppercase"
                   style={{ color: '#4a7dff', background: 'rgba(12,14,34,0.98)', letterSpacing: '0.1em' }}
                 >
                   {group.label}
@@ -117,7 +117,7 @@ export function GameSelector({ value, onChange }: GameSelectorProps) {
                     onClick={() => { onChange(game.id); setOpen(false); setQuery(''); }}
                   >
                     <span style={{ color: '#e0e4f0', fontSize: '0.875rem' }}>{game.label}</span>
-                    <span className="font-mono" style={{ color: '#6a6e94', fontSize: '0.55rem' }}>{game.filename}</span>
+                    <span className="font-sans" style={{ fontSize: '0.55rem' }}>{game.filename}</span>
                   </div>
                 ))}
               </div>

@@ -17,6 +17,9 @@ interface DeadzoneChartProps {
 }
 
 const chartStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
   background: 'rgba(14,16,38,0.4)',
   border: '1px solid rgba(80,90,160,0.1)',
   borderRadius: '8px',
@@ -43,13 +46,13 @@ export function DeadzoneChart({
   return (
     <div style={chartStyle}>
       <div style={titleStyle}>{title}</div>
-      <div className="chart-card">
+      <div className="chart-card" style={{ flex: 1, minHeight: 0 }}>
         <Line
           data={{ labels, datasets: [{ data, borderColor: color, borderWidth: 1.5, pointRadius: 0, fill: false }] }}
           options={{
             responsive: true,
+            maintainAspectRatio: false,
             animation: false,
-            aspectRatio: 1,
             scales: {
               x: { display: true, min: 0, max: 1, grid: { color: '#ffffff08' }, ticks: { color: '#6a6e94', font: { size: 8 } } },
               y: { display: true, min: 0, max: 1, grid: { color: '#ffffff08' }, ticks: { color: '#6a6e94', font: { size: 8 } } },

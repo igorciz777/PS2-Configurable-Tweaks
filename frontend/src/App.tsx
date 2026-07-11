@@ -31,12 +31,12 @@ export default function App() {
 
   if (!config) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-blue-950 to-black">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900">
         <header className="border-b border-slate-800/60 px-8 py-5 flex items-center bg-slate-950/80 backdrop-blur-sm">
           <h1 className="text-xl font-semibold" style={{ color: '#e0e4f0', letterSpacing: '0.02em' }}>PS2 Configurable Tweaks</h1>
         </header>
         <main className="flex-1 flex items-center justify-center">
-          <p style={{ color: '#6a6e94', fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem' }}>No game config found for key: {gameKey}</p>
+          <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '0.875rem' }}>No game config found for key: {gameKey}</p>
         </main>
       </div>
     );
@@ -45,21 +45,15 @@ export default function App() {
   const deadzoneFields = config.fields.filter((f): f is DeadzoneField => f.type === 'deadzone');
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-900 via-blue-950 to-black">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-850 via-blue-850 to-slate-800">
       {/* ── Top Bar ── */}
       <header className="flex items-center justify-between px-8 py-5 border-b border-slate-800/60 backdrop-blur-sm select-none bg-slate-950/80">
         <div className="flex items-center gap-5">
           <h1 className="text-xl font-semibold" style={{ color: '#e0e4f0', letterSpacing: '0.02em' }}>PS2 Configurable Tweaks</h1>
-          <span
-            className="font-mono text-xs uppercase px-2.5 py-1 rounded"
-            style={{ color: '#6a6e94', border: '1px solid rgba(80,90,160,0.2)' }}
-          >
-            v0.1.0
-          </span>
           <div className="w-px h-6" style={{ background: 'rgba(80,90,160,0.2)' }} />
           <button
             onClick={() => { setPatcherPnach(''); setPatcherOpen(true); }}
-            className="font-mono text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-lg transition-all duration-150"
+            className="font-sans text-xs font-semibold uppercase tracking-wider px-4 py-2 rounded-lg transition-all duration-150"
             style={{
               color: '#40c080',
               border: '1px solid rgba(64,192,128,0.3)',
@@ -78,7 +72,7 @@ export default function App() {
           </button>
           <button
             onClick={() => setAboutOpen(true)}
-            className="font-mono text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all duration-150"
+            className="font-sans text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-lg transition-all duration-150"
             style={{
               color: '#6a6e94',
               border: '1px solid rgba(80,90,160,0.2)',
@@ -96,13 +90,10 @@ export default function App() {
             About
           </button>
         </div>
-        <div className="font-mono text-xs uppercase tracking-wide" style={{ color: '#6a6e94' }}>
-          {config.filename}
-        </div>
       </header>
 
       {/* ── Main Content ── */}
-      <main className="flex-1 flex gap-8 p-8" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+      <main className="flex-1 flex flex-col min-[1366px]:flex-row gap-8 p-8" style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
         {/* ── Sidebar ── */}
         <aside className="flex flex-col gap-5 flex-1" style={{ minWidth: '320px' }}>
           <GameSelector value={gameKey} onChange={switchGame} />
@@ -125,12 +116,12 @@ export default function App() {
               style={{ background: 'rgba(14,16,38,0.5)', borderColor: 'rgba(80,90,160,0.12)' }}
             >
               <h3
-                className="font-mono text-xs font-semibold uppercase mb-5"
-                style={{ color: '#6a6e94', letterSpacing: '0.1em' }}
+                className="font-sans text-xs font-semibold uppercase mb-5"
+                style={{ letterSpacing: '0.1em' }}
               >
                 Deadzone Preview
               </h3>
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-3 gap-1 h-64">
                 {deadzoneFields.map(field => {
                   const a = field.axis;
                   const color = CHART_COLORS[a] || '#888';
@@ -154,8 +145,8 @@ export default function App() {
             style={{ background: 'rgba(14,16,38,0.5)', borderColor: 'rgba(80,90,160,0.12)' }}
           >
             <h3
-              className="font-mono text-xs font-semibold uppercase mb-5"
-              style={{ color: '#6a6e94', letterSpacing: '0.1em' }}
+              className="font-sans text-xs font-semibold uppercase mb-5"
+              style={{ letterSpacing: '0.1em' }}
             >
               .pnach Preview
             </h3>

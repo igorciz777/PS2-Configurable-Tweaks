@@ -25,7 +25,7 @@ const headerStyle: React.CSSProperties = {
 
 const labelStyle: React.CSSProperties = {
   flex: 1,
-  fontSize: '0.65rem',
+  fontSize: '0.75rem',
   fontWeight: 500,
   letterSpacing: '0.02em',
   color: '#c0c4d8',

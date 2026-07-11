@@ -16,7 +16,6 @@
   --color-red: #d06060;
   --color-orange: #d09040;
   --font-sans: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   --radius-card: 10px;
   --radius-sm: 6px;
 }
@@ -25,16 +24,14 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
-  font-size: 15px;
+  font-size: 1em;
 }
 
 body {
-  background: #090a1a;
+  background: #1c1f4f;
   color: var(--color-text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;

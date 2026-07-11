@@ -122,7 +122,7 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset, onAp
       </div>
       {statusMsg && (
         <div
-          className="flex items-center gap-2 text-xs font-mono px-3 py-2 rounded"
+          className="flex items-center gap-2 text-xs font-sans px-3 py-2 rounded"
           style={{
             color: statusMsg.startsWith('Error') ? '#ff6b6b' : '#a0a8d0',
             background: 'rgba(14,16,38,0.5)',

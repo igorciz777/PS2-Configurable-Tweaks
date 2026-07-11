@@ -19,7 +19,7 @@ const styles = {
     maxHeight: '85vh',
     display: 'flex',
     flexDirection: 'column' as const,
-    background: '#0c0e22',
+    background: '#1c2345',
     border: '1px solid rgba(80,90,160,0.2)',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -91,6 +91,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
             <div style={styles.heading}>PS2 Configurable Tweaks</div>
             <div style={{ marginTop: '4px' }}>
               A web-based tool for generating, adjusting and applying .pnach cheat files for PS2 games.
+              Made by <a href="https://github.com/igorciz777" style={styles.link} target="_blank" rel="noopener noreferrer">igorciz777</a>
             </div>
           </div>
 

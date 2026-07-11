@@ -29,7 +29,7 @@ const styles = {
     maxHeight: '90vh',
     display: 'flex',
     flexDirection: 'column' as const,
-    background: '#0c0e22',
+    background: '#1c2345',
     border: '1px solid rgba(80,90,160,0.2)',
     borderRadius: '12px',
     overflow: 'hidden',
