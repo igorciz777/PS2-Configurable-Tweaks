@@ -110,7 +110,7 @@ export function AboutModal({ onClose }: AboutModalProps) {
                 <strong style={{ color: '#e0e4f0' }}>PS2 Configurable Tweaks</strong> — GNU General Public License v3.0
                 <br />
                 The source code for PS2 Configurable Tweaks is available at{' '}
-                <a href="https://github.com/igorciz777/PS2-Configurable-Tweaks" style={styles.link} target="_blank" rel="noopener noreferrer">github.com/anomalyco/PS2-Configurable-Tweaks</a>.
+                <a href="https://github.com/igorciz777/PS2-Configurable-Tweaks" style={styles.link} target="_blank" rel="noopener noreferrer">github.com/igorciz777/PS2-Configurable-Tweaks</a>.
               </div>
               <div>
                 <strong style={{ color: '#e0e4f0' }}>PCSX2</strong> — GNU General Public License v3.0
