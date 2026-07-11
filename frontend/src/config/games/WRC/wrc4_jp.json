@@ -1,0 +1,116 @@
+{
+  "id": "wrc4_jp",
+  "label": "WRC 4 Japan 2.00 (NTSC-J)",
+  "group": "World Rally Championship",
+  "filename": "SLPM-65975_C6D912FB.pnach",
+  "fields": [
+    {
+      "type": "boolean",
+      "id": "wrc4j_english",
+      "label": "English Language",
+      "comment": "Changes default from Japanese to English",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "0042EC50", "type": "word", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4j_debugMenu",
+      "label": "Debug Menu",
+      "comment": "Enables debug menu",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "0055cdc0", "type": "extended", "hex": "00000001" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4j_improvedFFB",
+      "label": "Improved FFB",
+      "comment": "Attempt at improving FFB, tested on T300RS",
+      "help": "Disables steer damping control helper and steering deadzone, lowers vibration multiplier",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D044A484", "type": "extended", "hex": "03010063" },
+        { "address": "204297c4", "type": "extended", "hex": "24080000" },
+        { "address": "001A92D0", "type": "extended", "hex": "00000007" },
+        { "address": "10236e1c", "type": "extended", "hex": "00004200" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4j_removeDistBlur",
+      "label": "Remove Distance Blur",
+      "comment": "Removes blur applied to distant objects",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D044A484", "type": "extended", "hex": "06010063" },
+        { "address": "2011b888", "type": "extended", "hex": "00000000" },
+        { "address": "2011b8b8", "type": "extended", "hex": "00000000" },
+        { "address": "2011b8e8", "type": "extended", "hex": "00000000" },
+        { "address": "2011bd6c", "type": "extended", "hex": "00000000" },
+        { "address": "2011bd9c", "type": "extended", "hex": "00000000" },
+        { "address": "2011bdcc", "type": "extended", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4j_noDynamicDrawDist",
+      "label": "Disable Dynamic Draw Distance",
+      "comment": "Sets draw distance to static with custom settings, performance boost",
+      "help": "Sets draw distance to static with custom values for map, object, track, and landscape transition",
+      "author": "igorciz777, Agrippa",
+      "default": false,
+      "onWrites": [
+        { "address": "D044A484", "type": "extended", "hex": "05010063" },
+        { "address": "0044b4e8", "type": "extended", "hex": "00000000" },
+        { "address": "1044B538", "type": "extended", "hex": "000007D0" },
+        { "address": "1044B578", "type": "extended", "hex": "000005DC" },
+        { "address": "1044B5B8", "type": "extended", "hex": "00000258" },
+        { "address": "1044B5F8", "type": "extended", "hex": "000001F4" }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "id": "wrc4j_aspectRatio",
+      "label": "Aspect Ratio",
+      "tag": "Aspect Ratio",
+      "comment": "Select aspect ratio. Turn in-game widescreen off and on to see changes",
+      "author": "igorciz777",
+      "default": "off",
+      "options": [
+        { "value": "off", "label": "Off" },
+        { "value": "1610", "label": "16:10" },
+        { "value": "219", "label": "21:9" },
+        { "value": "329", "label": "32:9" }
+      ],
+      "writes": {
+        "1610": [
+          { "address": "D044A484", "type": "extended", "hex": "03010063" },
+          { "address": "20109874", "type": "extended", "hex": "3c023f20" },
+          { "address": "20108f54", "type": "extended", "hex": "3c033f20" },
+          { "address": "20109420", "type": "extended", "hex": "3c023f20" }
+        ],
+        "219": [
+          { "address": "D044A484", "type": "extended", "hex": "04010063" },
+          { "address": "20109874", "type": "extended", "hex": "3c023edb" },
+          { "address": "20108f54", "type": "extended", "hex": "3c033edb" },
+          { "address": "20109420", "type": "extended", "hex": "3c023edb" },
+          { "address": "2014A3A4", "type": "extended", "hex": "3C023F30" }
+        ],
+        "329": [
+          { "address": "D044A484", "type": "extended", "hex": "04010063" },
+          { "address": "20109874", "type": "extended", "hex": "3c023e90" },
+          { "address": "20108f54", "type": "extended", "hex": "3C033e90" },
+          { "address": "20109420", "type": "extended", "hex": "3C023e90" },
+          { "address": "2014A3A4", "type": "extended", "hex": "3C023F20" }
+        ]
+      }
+    }
+  ]
+}

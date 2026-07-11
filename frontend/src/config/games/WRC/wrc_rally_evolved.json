@@ -1,0 +1,135 @@
+{
+  "id": "wrc_rally_evolved",
+  "label": "WRC Rally Evolved (PAL)",
+  "group": "World Rally Championship",
+  "filename": "SCES-53247_CBBC2E7F.pnach",
+  "fields": [
+    {
+      "type": "boolean",
+      "id": "wrce_ntsc",
+      "label": "NTSC Mode",
+      "tag": "Performance",
+      "comment": "Enables leftover NTSC code (60fps patch), slightly crops the bottom of the screen",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D0100240", "type": "extended", "hex": "01110000" },
+        { "address": "2010030c", "type": "extended", "hex": "00a0402d" },
+        { "address": "D04D9DC4", "type": "extended", "hex": "02010063" },
+        { "address": "203064b0", "type": "extended", "hex": "24050200" },
+        { "address": "203064b8", "type": "extended", "hex": "24060200" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrce_debugMenu",
+      "label": "Enable Debug Menu",
+      "tag": "Debug",
+      "comment": "Enables the debug menu",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D0100240", "type": "extended", "hex": "02110000" },
+        { "address": "2015c5ec", "type": "extended", "hex": "00000000" },
+        { "address": "2015cd2c", "type": "extended", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrce_noMotionBlur",
+      "label": "Disable Motion Blur",
+      "tag": "Graphics",
+      "comment": "Removes motion blur from screen effects option",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D04D9DC4", "type": "extended", "hex": "01010063" },
+        { "address": "2011c9c0", "type": "extended", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrce_improvedFFB",
+      "label": "Improved FFB",
+      "tag": "Gameplay",
+      "comment": "Attempt at improving FFB, tested on T300RS",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D04D9DC4", "type": "extended", "hex": "02010063" },
+        { "address": "20478b28", "type": "extended", "hex": "42800000" },
+        { "address": "2059e768", "type": "extended", "hex": "3f800000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrce_extendDrawDist",
+      "label": "Extend Draw Distance",
+      "tag": "Graphics",
+      "comment": "Sets draw distance to static with custom settings",
+      "author": "igorciz777, Agrippa",
+      "default": false,
+      "onWrites": [
+        { "address": "D04D9DC4", "type": "extended", "hex": "06010063" },
+        { "address": "004cac34", "type": "extended", "hex": "00000000" },
+        { "address": "105b9e48", "type": "extended", "hex": "000005DC" },
+        { "address": "105b9e88", "type": "extended", "hex": "00000320" },
+        { "address": "105b9f08", "type": "extended", "hex": "00000258" },
+        { "address": "105b9f48", "type": "extended", "hex": "000001F4" },
+        { "address": "105b9f88", "type": "extended", "hex": "00000708" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrce_always3dCrowd",
+      "label": "Always Draw 3D Crowd",
+      "tag": "Graphics",
+      "comment": "Always draws the crowds in 3D (might cause slowdowns)",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D04D9DC4", "type": "extended", "hex": "03010063" },
+        { "address": "202e9ccc", "type": "extended", "hex": "45000008" },
+        { "address": "202e9cd8", "type": "extended", "hex": "45010005" },
+        { "address": "202e9ce8", "type": "extended", "hex": "45000001" }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "id": "wrce_aspectRatio",
+      "label": "Aspect Ratio",
+      "tag": "Aspect Ratio",
+      "comment": "Select aspect ratio. Turn in-game widescreen off and on to see changes",
+      "author": "igorciz777",
+      "default": "off",
+      "options": [
+        { "value": "off", "label": "Off" },
+        { "value": "1610", "label": "16:10" },
+        { "value": "219", "label": "21:9" },
+        { "value": "329", "label": "32:9" }
+      ],
+      "writes": {
+        "1610": [
+          { "address": "D0100240", "type": "extended", "hex": "03110000" },
+          { "address": "201089cc", "type": "extended", "hex": "3c023f20" },
+          { "address": "2010927c", "type": "extended", "hex": "3c023f20" },
+          { "address": "20107f74", "type": "extended", "hex": "3c033f20" }
+        ],
+        "219": [
+          { "address": "D0100240", "type": "extended", "hex": "04110000" },
+          { "address": "201089cc", "type": "extended", "hex": "3c023edb" },
+          { "address": "2010927c", "type": "extended", "hex": "3c023edb" },
+          { "address": "20107f74", "type": "extended", "hex": "3c033edb" },
+          { "address": "2014adb4", "type": "extended", "hex": "3C023F30" }
+        ],
+        "329": [
+          { "address": "D0100240", "type": "extended", "hex": "04110000" },
+          { "address": "201089cc", "type": "extended", "hex": "3c023e90" },
+          { "address": "2010927c", "type": "extended", "hex": "3c023e90" },
+          { "address": "20107f74", "type": "extended", "hex": "3c033e90" },
+          { "address": "2014adb4", "type": "extended", "hex": "3C023f20" }
+        ]
+      }
+    }
+  ]
+}

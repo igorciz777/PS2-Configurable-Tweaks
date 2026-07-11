@@ -6,5 +6,6 @@ export { DeadzoneField } from './DeadzoneField';
 export { FloatField } from './FloatField';
 export { IntegerField } from './IntegerField';
 export { ColorField } from './ColorField';
+export { DropdownField } from './DropdownField';
 export { generateValuePatches } from './PercentField';
 import './registry';

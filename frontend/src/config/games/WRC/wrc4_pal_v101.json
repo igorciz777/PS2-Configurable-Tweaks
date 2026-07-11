@@ -1,0 +1,105 @@
+{
+  "id": "wrc4_pal_v101",
+  "label": "WRC 4 v1.01 (PAL)",
+  "group": "World Rally Championship",
+  "filename": "SCES-52389_CDE7C999.pnach",
+  "fields": [
+    {
+      "type": "boolean",
+      "id": "wrc4v101_debugMenu",
+      "label": "Debug Menu",
+      "comment": "Enables debug menu",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "005b6e80", "type": "extended", "hex": "00000001" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4v101_improvedFFB",
+      "label": "Improved FFB",
+      "comment": "Attempt at improving FFB, tested on T300RS",
+      "help": "Disables steer damping control helper and steering deadzone, lowers vibration multiplier",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D04A4504", "type": "extended", "hex": "03010063" },
+        { "address": "20483c84", "type": "extended", "hex": "24080000" },
+        { "address": "001a8710", "type": "extended", "hex": "00000007" },
+        { "address": "10235f8c", "type": "extended", "hex": "00004200" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4v101_removeDistBlur",
+      "label": "Remove Distance Blur",
+      "comment": "Removes blur applied to distant objects",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "D04A4504", "type": "extended", "hex": "06010063" },
+        { "address": "2011b95c", "type": "extended", "hex": "00000000" },
+        { "address": "2011b92c", "type": "extended", "hex": "00000000" },
+        { "address": "2011b8fc", "type": "extended", "hex": "00000000" },
+        { "address": "2011b418", "type": "extended", "hex": "00000000" },
+        { "address": "2011b448", "type": "extended", "hex": "00000000" },
+        { "address": "2011b478", "type": "extended", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc4v101_noDynamicDrawDist",
+      "label": "Disable Dynamic Draw Distance",
+      "comment": "Disables dynamic draw distance, performance boost",
+      "help": "Sets draw distance to static with custom values for map, object, track, and landscape transition",
+      "author": "igorciz777, Agrippa",
+      "default": false,
+      "onWrites": [
+        { "address": "D04A4504", "type": "extended", "hex": "05010063" },
+        { "address": "004A5568", "type": "extended", "hex": "00000000" },
+        { "address": "104a55b8", "type": "extended", "hex": "000007D0" },
+        { "address": "104a55f8", "type": "extended", "hex": "000005DC" },
+        { "address": "104a5638", "type": "extended", "hex": "00000258" },
+        { "address": "104a5678", "type": "extended", "hex": "000001F4" }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "id": "wrc4v101_aspectRatio",
+      "label": "Aspect Ratio",
+      "tag": "Aspect Ratio",
+      "comment": "Select aspect ratio. Turn in-game widescreen off and on to see changes",
+      "author": "igorciz777",
+      "default": "off",
+      "options": [
+        { "value": "off", "label": "Off" },
+        { "value": "1610", "label": "16:10" },
+        { "value": "219", "label": "21:9" },
+        { "value": "329", "label": "32:9" }
+      ],
+      "writes": {
+        "1610": [
+          { "address": "D04A4504", "type": "extended", "hex": "03010063" },
+          { "address": "201093c4", "type": "extended", "hex": "3c023f20" },
+          { "address": "20108b14", "type": "extended", "hex": "3c033f20" },
+          { "address": "20108fe0", "type": "extended", "hex": "3c023f20" }
+        ],
+        "219": [
+          { "address": "D04A4504", "type": "extended", "hex": "04010063" },
+          { "address": "201093c4", "type": "extended", "hex": "3c023edb" },
+          { "address": "20108b14", "type": "extended", "hex": "3c033edb" },
+          { "address": "20108fe0", "type": "extended", "hex": "3c023edb" },
+          { "address": "2014A3A4", "type": "extended", "hex": "3C023F30" }
+        ],
+        "329": [
+          { "address": "D04A4504", "type": "extended", "hex": "04010063" },
+          { "address": "201093c4", "type": "extended", "hex": "3c023e90" },
+          { "address": "20108b14", "type": "extended", "hex": "3C033e90" },
+          { "address": "20108fe0", "type": "extended", "hex": "3C023e90" },
+          { "address": "2014A3A4", "type": "extended", "hex": "3C023F20" }
+        ]
+      }
+    }
+  ]
+}

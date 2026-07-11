@@ -1,11 +1,12 @@
 import type { FieldConfig, TweakValues, TweakValue } from '../../fields';
-import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField } from '../../fields';
+import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField, DropdownField } from '../../fields';
 import { PercentSlider } from './PercentSlider';
 import { CheckboxField } from './CheckboxField';
 import { DeadzoneGroup } from './DeadzoneGroup';
 import { FloatSlider } from './FloatSlider';
 import { IntegerSlider } from './IntegerSlider';
 import { ColorPickerField } from './ColorPicker';
+import { DropdownSelect } from './DropdownSelect';
 import { HelpIcon, HelpTooltip } from '../HelpTooltip';
 
 interface FieldRendererProps {
@@ -111,6 +112,20 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
           label={f.label}
           helpEl={helpEl}
           value={f.getColorValue(values)}
+          onChange={v => onSetValue(f.id, v)}
+        />
+      );
+    }
+
+    case 'dropdown': {
+      const f = field as DropdownField;
+      const val = (values[f.id] as string) ?? f.default;
+      return (
+        <DropdownSelect
+          label={f.label}
+          helpEl={helpEl}
+          options={f.options}
+          value={val}
           onChange={v => onSetValue(f.id, v)}
         />
       );

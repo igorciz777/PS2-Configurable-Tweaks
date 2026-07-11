@@ -1,0 +1,78 @@
+{
+  "id": "wrc3_jp",
+  "label": "WRC 3 (NTSC-J)",
+  "group": "World Rally Championship",
+  "filename": "SLPM-65583_C4467D30.pnach",
+  "fields": [
+    {
+      "type": "dropdown",
+      "id": "wrc3j_language",
+      "label": "Language",
+      "comment": "Sets the language. Default is Japanese",
+      "help": "00 - English\n01 - French\n02 - Italian\n03 - German\n04 - Spanish\n05 - Portuguese\n06 - Finnish\n07 - Norwegian\n08 - Japanese (default)",
+      "author": "igorciz777",
+      "default": "8",
+      "options": [
+        { "value": "0", "label": "English" },
+        { "value": "1", "label": "French" },
+        { "value": "2", "label": "Italian" },
+        { "value": "3", "label": "German" },
+        { "value": "4", "label": "Spanish" },
+        { "value": "5", "label": "Portuguese" },
+        { "value": "6", "label": "Finnish" },
+        { "value": "7", "label": "Norwegian" },
+        { "value": "8", "label": "Japanese (default)" }
+      ],
+      "writes": {
+        "0": [
+          { "address": "001D194C", "type": "extended", "hex": "00000000" },
+          { "address": "001D1954", "type": "extended", "hex": "00000000" }
+        ],
+        "1": [
+          { "address": "001D194C", "type": "extended", "hex": "00000001" },
+          { "address": "001D1954", "type": "extended", "hex": "00000001" }
+        ],
+        "2": [
+          { "address": "001D194C", "type": "extended", "hex": "00000002" },
+          { "address": "001D1954", "type": "extended", "hex": "00000002" }
+        ],
+        "3": [
+          { "address": "001D194C", "type": "extended", "hex": "00000003" },
+          { "address": "001D1954", "type": "extended", "hex": "00000003" }
+        ],
+        "4": [
+          { "address": "001D194C", "type": "extended", "hex": "00000004" },
+          { "address": "001D1954", "type": "extended", "hex": "00000004" }
+        ],
+        "5": [
+          { "address": "001D194C", "type": "extended", "hex": "00000005" },
+          { "address": "001D1954", "type": "extended", "hex": "00000005" }
+        ],
+        "6": [
+          { "address": "001D194C", "type": "extended", "hex": "00000006" },
+          { "address": "001D1954", "type": "extended", "hex": "00000006" }
+        ],
+        "7": [
+          { "address": "001D194C", "type": "extended", "hex": "00000007" },
+          { "address": "001D1954", "type": "extended", "hex": "00000007" }
+        ],
+        "8": [
+          { "address": "001D194C", "type": "extended", "hex": "00000008" },
+          { "address": "001D1954", "type": "extended", "hex": "00000008" }
+        ]
+      }
+    },
+    {
+      "type": "boolean",
+      "id": "wrc3j_drawDist",
+      "label": "Adjust Draw Distance",
+      "comment": "Adjusts draw distance values to prevent slowdowns",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "20313fc0", "type": "extended", "hex": "43700000" },
+        { "address": "20313fc8", "type": "extended", "hex": "43700000" }
+      ]
+    }
+  ]
+}

@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ensureWasm, runComputePatches } from '../wasm';
-import type { PatchResult } from '../wasm';
+import { ensureWasm, findElfOffset, analyzeElf, parsePnach } from '../wasm';
+import type { ParsedPatch, ProgramHeader, PatchInfo } from '../wasm';
+import streamSaver from 'streamsaver';
+import * as ponyfill from 'web-streams-polyfill';
 
-interface PnachPatcherModalProps {
-  initialPnachText?: string;
-  onClose: () => void;
-}
+streamSaver.WritableStream = ponyfill.WritableStream;
+streamSaver.mitm = 'mitm.html';
 
 type LogLine = { text: string; kind: 'info' | 'ok' | 'error' | 'stage' };
+
+const SCAN_SIZE = 128 * 1024 * 1024;
+const CHUNK_SIZE = 64 * 1024 * 1024;
 
 const styles = {
   overlay: {
@@ -174,15 +177,47 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function fallbackDownload(blob: Blob, filename: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename.replace(/\.iso$/i, '_patched.iso');
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+function getPatchDataSize(length: string, address: number): number {
+  switch (length) {
+    case 'byte': case '_byte': return 1;
+    case 'short': case '_short': return 2;
+    case 'word': case '_word': return 4;
+    case 'extended': case '_extended':
+      if (address & 0x20000000) return 4;
+      if (address & 0x10000000) return 2;
+      return 1;
+    default: return 4;
+  }
+}
+
+function computePatchLocations(
+  patches: ParsedPatch[],
+  programHeaders: ProgramHeader[],
+  elfOffset: number,
+): PatchInfo[] {
+  const locations: PatchInfo[] = [];
+  for (const p of patches) {
+    const adjustedAddress = p.address & 0x0FFF_FFFF;
+    const size = getPatchDataSize(p.length, p.address);
+    for (const ph of programHeaders) {
+      const phStart = ph.virt_addr;
+      const phEnd = ph.virt_addr + ph.file_size;
+      if (phStart <= adjustedAddress && phEnd > adjustedAddress + size) {
+        locations.push({
+          offset: elfOffset + ph.offset + (adjustedAddress - ph.virt_addr),
+          value: p.data,
+          size,
+        });
+        break;
+      }
+    }
+  }
+  return locations;
+}
+
+interface PnachPatcherModalProps {
+  initialPnachText?: string;
+  onClose: () => void;
 }
 
 export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherModalProps) {
@@ -243,65 +278,66 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
       await ensureWasm();
       addLog('WASM module loaded', 'ok');
 
-      addLog(`Reading ISO: ${isoFile.name} (${formatSize(isoFile.size)})...`, 'stage');
-      const isoData = new Uint8Array(await isoFile.arrayBuffer());
-      addLog(`ISO loaded: ${formatSize(isoData.length)}`, 'ok');
+      addLog(`Scanning ELF in first ${formatSize(SCAN_SIZE)} of ISO...`, 'stage');
+      const scanSize = Math.min(SCAN_SIZE, isoFile.size);
+      const prefix = new Uint8Array(await isoFile.slice(0, scanSize).arrayBuffer());
 
-      addLog('Parsing pnach patches...', 'stage');
-      addLog('Computing patch locations (ELF scan)...', 'stage');
+      const elfInfo = findElfOffset(prefix);
+      addLog(`ELF found at offset 0x${elfInfo.offset.toString(16).toUpperCase()}`, 'ok');
 
-      const result: PatchResult = runComputePatches(isoData, pnachText);
+      addLog('Parsing ELF program headers...', 'info');
+      const elfData = analyzeElf(prefix, elfInfo.offset);
+      addLog(`ELF has ${elfData.program_headers.length} program header(s)`, 'info');
 
-      if (!result.patches || result.patches.length === 0) {
+      addLog('Parsing PNACH patches...', 'info');
+      const parsedPatches = parsePnach(pnachText);
+      addLog(`${parsedPatches.length} patch(es) parsed`, 'info');
+
+      const locations = computePatchLocations(parsedPatches, elfData.program_headers, elfInfo.offset);
+      if (locations.length === 0) {
         addLog('No patches could be applied - no matching addresses found', 'error');
         setPatching(false);
         return;
       }
-
-      addLog(`Found ${result.patches.length} patch(es) to apply`, 'info');
-      addLog(`ELF offset: 0x${result.elf_offset.toString(16).toUpperCase()}`, 'info');
-
-      addLog('Applying patches to ISO data in memory...', 'stage');
-      const view = new DataView(isoData.buffer);
-      for (let i = 0; i < result.patches.length; i++) {
-        const p = result.patches[i];
-        switch (p.size) {
-          case 1: view.setUint8(p.offset, p.value); break;
-          case 2: view.setUint16(p.offset, p.value, true); break;
-          case 4: view.setUint32(p.offset, p.value, true); break;
-        }
+      addLog(`${locations.length} patch(es) resolved to ISO offsets`, 'ok');
+      for (const loc of locations) {
+        addLog(`  Patch at ISO offset 0x${loc.offset.toString(16).toUpperCase()} = 0x${loc.value.toString(16).toUpperCase()} (${loc.size} byte(s))`, 'info');
       }
-      addLog(`Successfully applied ${result.patches.length} patch(es)`, 'ok');
 
-      addLog('Saving patched ISO...', 'stage');
-      const patchedBlob = new Blob([isoData], { type: 'application/octet-stream' });
+      addLog(`Streaming ${formatSize(isoFile.size)} in ${formatSize(CHUNK_SIZE)} chunks...`, 'stage');
+      const outputName = isoFile.name.replace(/\.iso$/i, '_patched.iso');
+      const fileStream = streamSaver.createWriteStream(outputName, { size: isoFile.size });
+      const writer = fileStream.getWriter();
 
-      if ('showSaveFilePicker' in window) {
-        try {
-          const fileHandle = await (window as any).showSaveFilePicker({
-            suggestedName: isoFile.name,
-            types: [{
-              description: 'ISO File',
-              accept: { 'application/octet-stream': ['.iso'] },
-            }],
-          });
-          const writable = await fileHandle.createWritable();
-          await writable.write(patchedBlob);
-          await writable.close();
-          addLog(`Patched ISO saved successfully: ${isoFile.name}`, 'ok');
-        } catch (err: any) {
-          if (err.name === 'AbortError' || err.message?.includes('abort')) {
-            addLog('Save cancelled by user', 'error');
-          } else {
-            fallbackDownload(patchedBlob, isoFile.name);
-            addLog('Downloading patched ISO (fallback mode)', 'info');
+      let offset = 0;
+      let patchedCount = 0;
+
+      while (offset < isoFile.size) {
+        const size = Math.min(CHUNK_SIZE, isoFile.size - offset);
+        const chunk = new Uint8Array(await isoFile.slice(offset, offset + size).arrayBuffer());
+        const chunkEnd = offset + chunk.length;
+
+        const relevant = locations.filter(p => p.offset >= offset && p.offset < chunkEnd);
+        if (relevant.length > 0) {
+          const view = new DataView(chunk.buffer);
+          for (const p of relevant) {
+            const localOffset = p.offset - offset;
+            switch (p.size) {
+              case 1: view.setUint8(localOffset, p.value); break;
+              case 2: view.setUint16(localOffset, p.value, true); break;
+              case 4: view.setUint32(localOffset, p.value, true); break;
+            }
+            patchedCount++;
           }
         }
-      } else {
-        fallbackDownload(patchedBlob, isoFile.name);
-        addLog('Downloading patched ISO', 'info');
+
+        await writer.write(chunk);
+        offset += size;
+        addLog(`Processing... ${formatSize(offset)} / ${formatSize(isoFile.size)} (${Math.round((offset / isoFile.size) * 100)}%)`, 'info');
       }
 
+      await writer.close();
+      addLog(`${patchedCount} patch(es) applied. Saved as: ${outputName}`, 'ok');
       addLog('Done!', 'ok');
     } catch (err: any) {
       addLog(`Error: ${err.message || err}`, 'error');

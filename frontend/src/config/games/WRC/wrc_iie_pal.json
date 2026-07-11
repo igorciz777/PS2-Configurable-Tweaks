@@ -1,0 +1,33 @@
+{
+  "id": "wrc_iie_pal",
+  "label": "WRC II Extreme (PAL)",
+  "group": "World Rally Championship",
+  "filename": "SCES-50934_033DDE89.pnach",
+  "fields": [
+    {
+      "type": "boolean",
+      "id": "wrc2e_noDistBlur",
+      "label": "Disable Distance Blur",
+      "comment": "Disables distance blur effect while keeping the fog",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "0018ebf0", "type": "word", "hex": "00000000" },
+        { "address": "0018ec18", "type": "word", "hex": "00000000" }
+      ]
+    },
+    {
+      "type": "boolean",
+      "id": "wrc2e_noFogBlur",
+      "label": "Disable Fog and Distance Blur",
+      "comment": "Disables fog and distance blur effects",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        { "address": "00191e10", "type": "word", "hex": "00000000" },
+        { "address": "00191e80", "type": "word", "hex": "00000000" },
+        { "address": "00191ed8", "type": "word", "hex": "00000000" }
+      ]
+    }
+  ]
+}
