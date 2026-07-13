@@ -79,12 +79,12 @@
             "bits": "hi"
           },
           {
-            "address": "1018ef9c",
+            "address": "1018efcc",
             "type": "extended",
             "bits": "lo"
           },
           {
-            "address": "1018efa4",
+            "address": "1018efd0",
             "type": "extended",
             "bits": "hi"
           }
@@ -106,7 +106,7 @@
             "bits": "lo"
           },
           {
-            "address": "1018efdc",
+            "address": "1018efd8",
             "type": "extended",
             "bits": "hi"
           }

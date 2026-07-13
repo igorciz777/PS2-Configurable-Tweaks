@@ -84,6 +84,11 @@
             "address": "101c8888",
             "type": "extended",
             "bits": "lo"
+          },
+          {
+            "address": "101c888c",
+            "type": "extended",
+            "bits": "hi"
           }
         ],
         "midMinusLow": [
@@ -94,6 +99,18 @@
           },
           {
             "address": "101c87c4",
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "highMinusMid": [
+          {
+            "address": "101c87f0",
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": "101c87f8",
             "type": "extended",
             "bits": "hi"
           }
