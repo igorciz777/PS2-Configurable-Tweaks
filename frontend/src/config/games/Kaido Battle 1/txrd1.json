@@ -283,6 +283,42 @@
           "hex": "00000000"
         }
       ]
+    },
+    {
+      "type": "boolean",
+      "id": "kb2Camera",
+      "label": "KB2 Camera Parameters",
+      "tag": "Camera",
+      "comment": "Backports camera params from KB2",
+      "author": "igorciz777",
+      "default": false,
+      "onWrites": [
+        {
+          "address": "003ac830",
+          "type": "word",
+          "hex": "c0d00000"
+        },
+        {
+          "address": "003ac840",
+          "type": "word",
+          "hex": "00000000"
+        },
+        {
+          "address": "003ac844",
+          "type": "word",
+          "hex": "3fc00000"
+        },
+        {
+          "address": "003ac864",
+          "type": "word",
+          "hex": "3fe66666"
+        },
+        {
+          "address": "003ac874",
+          "type": "word",
+          "hex": "3fc51eb8"
+        }
+      ]
     }
   ]
 }
