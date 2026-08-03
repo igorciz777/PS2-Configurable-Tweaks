@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.7.0",
     "@tailwindcss/postcss": "^4.3.1",
+    "@types/three": "^0.185.3",
     "chart.js": "^4.5.1",
     "motion": "^12.42.0",
     "postcss": "^8.5.15",
@@ -22,6 +25,7 @@
     "remark-gfm": "^4.0.1",
     "streamsaver": "^2.0.6",
     "tailwindcss": "^4.3.1",
+    "three": "^0.185.1",
     "web-streams-polyfill": "^4.1.0"
   },
   "devDependencies": {

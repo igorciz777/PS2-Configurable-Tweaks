@@ -236,6 +236,70 @@
           }
         ]
       }
+    },
+    {
+      "type": "transform",
+      "id": "vsp",
+      "label": "View Space Point",
+      "tag": "Camera",
+      "min": -100,
+      "max": 100,
+      "default": [-6.5, 1.84, 0],
+      "step": 0.01,
+      "help": "Camera look-at target / pivot point in view space.",
+      "writes": {
+        "x": { "address": "00369430", "type": "word" },
+        "y": { "address": "00369434", "type": "word" },
+        "z": { "address": "00369438", "type": "word" }
+      }
+    },
+    {
+      "type": "transform",
+      "id": "vrp",
+      "label": "View Reference Point",
+      "tag": "Camera",
+      "min": -100,
+      "max": 100,
+      "default": [0, 0.6, 0],
+      "step": 0.01,
+      "help": "Secondary reference point for camera orientation.",
+      "writes": {
+        "x": { "address": "00369440", "type": "word" },
+        "y": { "address": "00369444", "type": "word" },
+        "z": { "address": "00369448", "type": "word" }
+      }
+    },
+    {
+      "type": "transform",
+      "id": "vup",
+      "label": "View Up Vector",
+      "tag": "Camera",
+      "min": -100,
+      "max": 100,
+      "default": [0, 1.0, 0],
+      "step": 0.01,
+      "help": "Camera up direction vector.",
+      "writes": {
+        "x": { "address": "00369450", "type": "word" },
+        "y": { "address": "00369454", "type": "word" },
+        "z": { "address": "00369458", "type": "word" }
+      }
+    },
+    {
+      "type": "transform",
+      "id": "vcp",
+      "label": "Camera Point",
+      "tag": "Camera",
+      "min": -100,
+      "max": 100,
+      "default": [0.75, 1.8, 0],
+      "step": 0.01,
+      "help": "Camera position in world space.",
+      "writes": {
+        "x": { "address": "00369460", "type": "word" },
+        "y": { "address": "00369464", "type": "word" },
+        "z": { "address": "00369468", "type": "word" }
+      }
     }
   ]
 }

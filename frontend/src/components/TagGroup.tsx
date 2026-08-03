@@ -103,10 +103,10 @@ function TreeNodeRow({
 
       {open && (
         <div style={{ padding: '16px' }}>
-          {node.fields.length > 0 && (
+              {node.fields.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 mb-3">
               {node.fields.map(field => (
-                <div key={field.id} style={field.type === 'deadzone' ? { gridColumn: '1 / -1' } : undefined}>
+                <div key={field.id} style={(field.type === 'deadzone' || field.type === 'transform') ? { gridColumn: '1 / -1' } : undefined}>
                   <FieldRenderer
                     field={field}
                     values={values}
@@ -156,7 +156,7 @@ export function TagGroup(props: TagGroupProps) {
       {ungrouped.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
           {ungrouped.map(field => (
-            <div key={field.id} style={field.type === 'deadzone' ? { gridColumn: '1 / -1' } : undefined}>
+            <div key={field.id} style={(field.type === 'deadzone' || field.type === 'transform') ? { gridColumn: '1 / -1' } : undefined}>
               <FieldRenderer
                 field={field}
                 values={values}

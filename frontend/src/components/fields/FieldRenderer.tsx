@@ -1,5 +1,5 @@
 import type { FieldConfig, TweakValues, TweakValue } from '../../fields';
-import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField, DropdownField } from '../../fields';
+import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField, DropdownField, TransformField } from '../../fields';
 import { PercentSlider } from './PercentSlider';
 import { CheckboxField } from './CheckboxField';
 import { DeadzoneGroup } from './DeadzoneGroup';
@@ -7,6 +7,7 @@ import { FloatSlider } from './FloatSlider';
 import { IntegerSlider } from './IntegerSlider';
 import { ColorPickerField } from './ColorPicker';
 import { DropdownSelect } from './DropdownSelect';
+import { TransformFieldCard } from './TransformFieldCard';
 import { HelpIcon, HelpTooltip } from '../HelpTooltip';
 
 interface FieldRendererProps {
@@ -127,6 +128,31 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
           options={f.options}
           value={val}
           onChange={v => onSetValue(f.id, v)}
+        />
+      );
+    }
+
+    case 'transform': {
+      const f = field as TransformField;
+      const xKey = `${f.id}X`;
+      const yKey = `${f.id}Y`;
+      const zKey = `${f.id}Z`;
+      const xVal = typeof values[xKey] === 'number' ? (values[xKey] as number) : f.default[0];
+      const yVal = typeof values[yKey] === 'number' ? (values[yKey] as number) : f.default[1];
+      const zVal = typeof values[zKey] === 'number' ? (values[zKey] as number) : f.default[2];
+      return (
+        <TransformFieldCard
+          label={f.label}
+          helpEl={helpEl}
+          min={f.min}
+          max={f.max}
+          step={f.step}
+          x={xVal}
+          y={yVal}
+          z={zVal}
+          onXChange={v => onSetValue(xKey, v)}
+          onYChange={v => onSetValue(yKey, v)}
+          onZChange={v => onSetValue(zKey, v)}
         />
       );
     }

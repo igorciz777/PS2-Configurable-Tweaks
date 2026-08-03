@@ -8,7 +8,9 @@ import { PnachOutput } from './components/PnachOutput';
 import { ActionButtons } from './components/ActionButtons';
 import { PnachPatcherModal } from './components/PnachPatcherModal';
 import { AboutModal } from './components/AboutModal';
+import { CameraPreview } from './components/CameraPreview';
 import type { DeadzoneField } from './fields';
+import type { TransformField } from './fields';
 import './App.css';
 
 const CHART_COLORS: Record<string, string> = {
@@ -43,6 +45,7 @@ export default function App() {
   }
 
   const deadzoneFields = config.fields.filter((f): f is DeadzoneField => f.type === 'deadzone');
+  const transformFields = config.fields.filter((f): f is TransformField => f.type === 'transform');
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-850 via-blue-850 to-slate-800">
@@ -138,6 +141,23 @@ export default function App() {
                     />
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {transformFields.length > 0 && (
+            <div
+              className="p-6 rounded-xl border"
+              style={{ background: 'rgba(14,16,38,0.5)', borderColor: 'rgba(80,90,160,0.12)' }}
+            >
+              <h3
+                className="font-sans text-xs font-semibold uppercase mb-5"
+                style={{ letterSpacing: '0.1em' }}
+              >
+                Camera Preview
+              </h3>
+              <div style={{ height: '280px', borderRadius: '8px', overflow: 'hidden' }}>
+                <CameraPreview fields={transformFields} values={values} />
               </div>
             </div>
           )}

@@ -7,5 +7,7 @@ export { FloatField } from './FloatField';
 export { IntegerField } from './IntegerField';
 export { ColorField } from './ColorField';
 export { DropdownField } from './DropdownField';
+export { TransformField } from './TransformField';
+export type { TransformWrites, TransformAxisWrite } from './TransformField';
 export { generateValuePatches } from './PercentField';
 import './registry';
