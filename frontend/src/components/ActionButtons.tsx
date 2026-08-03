@@ -71,8 +71,9 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset, onAp
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-4 flex-wrap">
+      <div className="flex gap-3 sm:gap-4 flex-wrap">
         <button
+          className="action-btn-mobile"
           style={btnPrimary}
           onMouseEnter={e => { e.currentTarget.style.background = '#5a8dff'; }}
           onMouseLeave={e => { e.currentTarget.style.background = '#4a7dff'; }}
@@ -83,6 +84,7 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset, onAp
           Download .pnach
         </button>
         <button
+          className="action-btn-mobile"
           style={{
             ...btnApply,
             opacity: !pnachContent ? 0.6 : 1,
@@ -106,6 +108,7 @@ export function ActionButtons({ pnachContent, filename, gameLabel, onReset, onAp
           Apply .pnach to ISO
         </button>
         <button
+          className="action-btn-mobile"
           style={btnSecondary}
           onMouseEnter={e => {
             e.currentTarget.style.background = 'rgba(14,16,38,0.8)';

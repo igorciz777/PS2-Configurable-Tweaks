@@ -354,17 +354,17 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
 
   return (
     <div style={styles.overlay} onClick={handleOverlayClick}>
-      <div style={styles.modal}>
+      <div style={styles.modal} className="patcher-modal">
         <div style={styles.header}>
           <span style={styles.title}>Patch .pnach to ISO</span>
           <button style={styles.closeBtn} onClick={onClose}>✕</button>
         </div>
 
-        <div style={styles.body}>
+        <div style={styles.body} className="patcher-modal-body">
           <div>
             <div style={styles.label}>ISO File</div>
-            <div style={styles.fileArea}>
-              <div style={styles.filePath}>
+            <div style={styles.fileArea} className="patcher-file-area">
+              <div style={styles.filePath} className="patcher-file-path">
                 {isoFile ? isoFile.name : 'No file selected'}
               </div>
               <button style={styles.browseBtn} onClick={handleIsoBrowse}>
@@ -381,7 +381,7 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }} className="patcher-pnach-header">
               <span style={styles.label}>Pnach Text</span>
               <button style={styles.loadFileBtn} onClick={handleLoadPnachFile}>
                 Load from file
@@ -420,7 +420,7 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} className="patcher-disclaimer-row">
             <div style={{ flex: 1, fontFamily: 'JetBrains Mono, monospace', fontSize: '0.7rem', color: '#6a6e94', lineHeight: 1.5 }}>
               All processing is done entirely in your browser via WebAssembly.
               Your ISO file and pnach data are never uploaded or stored anywhere.

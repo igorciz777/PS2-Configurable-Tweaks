@@ -25,16 +25,16 @@ export function RangeSlider({
       >
         {label}
       </span>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 sm:gap-3">
         <input
-          type="range" className="psbbn-range flex-1"
+          type="range" className="psbbn-range flex-1 min-w-0"
           min={min} max={max} step={step}
           value={value}
           onChange={e => onChange(parseFloat(e.target.value))}
         />
         <input
-          type="number" className="psbbn-input"
-          style={{ width: '80px', padding: '6px 10px', textAlign: 'center' }}
+          type="number" className="psbbn-input shrink-0"
+          style={{ width: '72px', padding: '6px 8px', textAlign: 'center' }}
           min={min} max={max} step={step}
           value={value}
           onChange={e => onChange(parseFloat(e.target.value) || 0)}
