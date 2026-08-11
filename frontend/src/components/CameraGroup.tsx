@@ -68,7 +68,9 @@ export function CameraGroup({
         style={{ background: headerBg, borderBottom: headerBorder }}
       >
         <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: '#c0c4d8' }}>
-          Camera
+          Camera <span className="text-xs font-normal text-muted-foreground" style={{ color: '#6a6e94' }}>
+            (WIP)
+          </span>
         </span>
       </div>
 
@@ -110,7 +112,7 @@ export function CameraGroup({
         <div
           style={{ width: '70%', padding: '16px' }}
         >
-          <div style={{ width: '100%', aspectRatio: '4 / 3' }}>
+          <div style={{ width: '100%', aspectRatio: '10 / 7' }}>
             <CameraPreview
               prefix={activeCamera}
               values={values}

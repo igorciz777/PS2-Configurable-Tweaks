@@ -72,27 +72,63 @@ export class TransformField extends FieldConfig {
   generatePatches(values: TweakValues, activeCamera?: string): PatchLine[] {
     const axes = ['x', 'y', 'z'] as const;
     const suffixes = ['X', 'Y', 'Z'] as const;
+
+    if (activeCamera && this.cameraWrites?.[activeCamera]) {
+      const writeSource = this.cameraWrites[activeCamera];
+      const prefix = activeCamera;
+      const patches: PatchLine[] = [];
+      for (let i = 0; i < axes.length; i++) {
+        const axis = axes[i];
+        const stateKey = `${prefix}${this.id}${suffixes[i]}`;
+        const write = writeSource[axis];
+        const value = (values[stateKey] as number) ?? this.default[i];
+        const hex = floatToHex(value);
+        let val: string;
+        switch (write.bits) {
+          case 'lo': val = hex.substring(0, 4); break;
+          case 'hi': val = hex.substring(4, 8); break;
+          default: val = hex; break;
+        }
+        patches.push({ address: write.address, type: write.type, value: val });
+      }
+      return patches;
+    }
+
     const patches: PatchLine[] = [];
 
-    const writeSource: TransformWrites = (activeCamera && this.cameraWrites?.[activeCamera]) || this.writes;
-    const prefix = activeCamera && this.cameraWrites ? activeCamera : '';
-
-    for (let i = 0; i < axes.length; i++) {
-      const axis = axes[i];
-      const stateKey = `${prefix}${this.id}${suffixes[i]}`;
-      const write = writeSource[axis];
-      const value = (values[stateKey] as number) ?? this.default[i];
-      const hex = floatToHex(value);
-
-      let val: string;
-      switch (write.bits) {
-        case 'lo': val = hex.substring(0, 4); break;
-        case 'hi': val = hex.substring(4, 8); break;
-        case 'full':
-        default: val = hex; break;
+    if (this.cameraWrites) {
+      for (const cam of Object.keys(this.cameraWrites)) {
+        const writeSource = this.cameraWrites[cam];
+        for (let i = 0; i < axes.length; i++) {
+          const axis = axes[i];
+          const stateKey = `${cam}${this.id}${suffixes[i]}`;
+          const write = writeSource[axis];
+          const value = (values[stateKey] as number) ?? this.default[i];
+          const hex = floatToHex(value);
+          let val: string;
+          switch (write.bits) {
+            case 'lo': val = hex.substring(0, 4); break;
+            case 'hi': val = hex.substring(4, 8); break;
+            default: val = hex; break;
+          }
+          patches.push({ address: write.address, type: write.type, value: val });
+        }
       }
-
-      patches.push({ address: write.address, type: write.type, value: val });
+    } else {
+      for (let i = 0; i < axes.length; i++) {
+        const axis = axes[i];
+        const stateKey = `${this.id}${suffixes[i]}`;
+        const write = this.writes[axis];
+        const value = (values[stateKey] as number) ?? this.default[i];
+        const hex = floatToHex(value);
+        let val: string;
+        switch (write.bits) {
+          case 'lo': val = hex.substring(0, 4); break;
+          case 'hi': val = hex.substring(4, 8); break;
+          default: val = hex; break;
+        }
+        patches.push({ address: write.address, type: write.type, value: val });
+      }
     }
 
     return patches;

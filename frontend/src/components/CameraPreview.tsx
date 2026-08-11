@@ -1,5 +1,5 @@
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
-import { OrbitControls, Grid, Line } from '@react-three/drei';
+import { OrbitControls, Grid, Line, useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 import type { TweakValues } from '../fields';
 
@@ -39,13 +39,20 @@ function DynamicCamera({
   const { camera } = useThree();
 
   useFrame(() => {
-    camera.position.set(vsp[0], vsp[1], vsp[2]);
-    camera.up.set(vup[0], vup[1], vup[2]);
-    camera.lookAt(new THREE.Vector3(vrp[0], vrp[1], vrp[2]));
-    camera.updateProjectionMatrix();
+    const perspectiveCamera = camera as THREE.PerspectiveCamera;
+    perspectiveCamera.position.set(vsp[0], vsp[1], vsp[2]);
+    perspectiveCamera.up.set(vup[0], vup[1], vup[2]);
+    perspectiveCamera.fov = 60;
+    perspectiveCamera.lookAt(vrp[0], vrp[1], vrp[2]);
+    perspectiveCamera.updateProjectionMatrix();
   });
 
   return null;
+}
+
+function CarModel() {
+  const { scene } = useGLTF('/models/mr2.glb');
+  return <primitive object={scene} position={[0, 0, 0]} />;
 }
 
 function Scene({
@@ -65,8 +72,8 @@ function Scene({
 
       <color attach="background" args={['rgb(192, 196, 216)']} />
 
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={0.8} />
+      <ambientLight intensity={1} />
+      <directionalLight position={[10, 10, 5]} intensity={2} />
 
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[50, 50]} />
@@ -87,10 +94,7 @@ function Scene({
         position={[0, 0.01, 0]}
       />
 
-      <mesh position={[0, 0.3, 0]}>
-        <boxGeometry args={[0.5, 0.6, 1.2]} />
-        <meshStandardMaterial color="#4a7dff" />
-      </mesh>
+      <CarModel />
 
       <mesh position={vrp}>
         <sphereGeometry args={[0.1, 8, 8]} />
@@ -127,7 +131,7 @@ export function CameraPreview({ prefix, values, fallbacks }: CameraPreviewProps)
     >
       <Canvas
         camera={{
-          fov: 50,
+          fov: 60,
           near: 0.1,
           far: 200,
           position: vspVec,

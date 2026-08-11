@@ -6,7 +6,7 @@
   "cameras": [
     {
       "id": "cam0",
-      "label": "Camera 1",
+      "label": "Driver's",
       "fieldIds": [
         "vsp",
         "vrp",
@@ -38,7 +38,7 @@
     },
     {
       "id": "cam1",
-      "label": "Camera 2",
+      "label": "Behind",
       "fieldIds": [
         "vsp",
         "vrp",
@@ -70,7 +70,7 @@
     },
     {
       "id": "cam2",
-      "label": "Camera 3",
+      "label": "Rear",
       "fieldIds": [
         "vsp",
         "vrp",
@@ -96,32 +96,6 @@
         "vcp": [
           0.75,
           0.75,
-          0.0
-        ]
-      }
-    },
-    {
-      "id": "cam3",
-      "label": "Camera 4",
-      "fieldIds": [
-        "vsp",
-        "vrp",
-        "vup"
-      ],
-      "defaults": {
-        "vsp": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "vrp": [
-          10.0,
-          0.0,
-          0.0
-        ],
-        "vup": [
-          0.0,
-          1.0,
           0.0
         ]
       }
@@ -496,20 +470,6 @@
             "address": "00369478",
             "type": "word"
           }
-        },
-        "cam3": {
-          "x": {
-            "address": "003694B0",
-            "type": "word"
-          },
-          "y": {
-            "address": "003694B4",
-            "type": "word"
-          },
-          "z": {
-            "address": "003694B8",
-            "type": "word"
-          }
         }
       }
     },
@@ -581,20 +541,6 @@
           },
           "z": {
             "address": "00369488",
-            "type": "word"
-          }
-        },
-        "cam3": {
-          "x": {
-            "address": "003694C0",
-            "type": "word"
-          },
-          "y": {
-            "address": "003694C4",
-            "type": "word"
-          },
-          "z": {
-            "address": "003694C8",
             "type": "word"
           }
         }
@@ -670,20 +616,6 @@
             "address": "00369498",
             "type": "word"
           }
-        },
-        "cam3": {
-          "x": {
-            "address": "003694D0",
-            "type": "word"
-          },
-          "y": {
-            "address": "003694D4",
-            "type": "word"
-          },
-          "z": {
-            "address": "003694D8",
-            "type": "word"
-          }
         }
       }
     },
@@ -700,7 +632,7 @@
         0.0
       ],
       "step": 0.01,
-      "help": "Secondary camera reference (#TODO: idk what it does lol).",
+      "help": "Secondary camera reference point, seems to control how much the camera rotates on car's yaw angle change.",
       "writes": {
         "x": {
           "address": "00369420",

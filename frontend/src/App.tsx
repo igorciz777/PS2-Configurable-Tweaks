@@ -26,8 +26,8 @@ export default function App() {
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const pnachContent = useMemo(
-    () => config ? generatePnach(config.fields, values, config.label, config.filename, activeCamera) : '',
-    [config, values, activeCamera],
+    () => config ? generatePnach(config.fields, values, config.label, config.filename) : '',
+    [config, values],
   );
 
   if (!config) {
