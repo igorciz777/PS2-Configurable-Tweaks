@@ -63,6 +63,8 @@ function Scene({
     <>
       <DynamicCamera vsp={vsp} vrp={vrp} vup={vup} />
 
+      <color attach="background" args={['rgb(192, 196, 216)']} />
+
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 5]} intensity={0.8} />
 
