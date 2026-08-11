@@ -8,9 +8,8 @@ import { PnachOutput } from './components/PnachOutput';
 import { ActionButtons } from './components/ActionButtons';
 import { PnachPatcherModal } from './components/PnachPatcherModal';
 import { AboutModal } from './components/AboutModal';
-import { CameraPreview } from './components/CameraPreview';
+import { CameraGroup } from './components/CameraGroup';
 import type { DeadzoneField } from './fields';
-import type { TransformField } from './fields';
 import './App.css';
 
 const CHART_COLORS: Record<string, string> = {
@@ -20,15 +19,15 @@ const CHART_COLORS: Record<string, string> = {
 };
 
 export default function App() {
-  const { gameKey, config, values, switchGame, setValue, reset, getPercent, updatePercent } =
+  const { gameKey, config, values, activeCamera, switchGame, setValue, reset, getPercent, updatePercent, setActiveCamera } =
     useTweaksState();
   const [patcherOpen, setPatcherOpen] = useState(false);
   const [patcherPnach, setPatcherPnach] = useState('');
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const pnachContent = useMemo(
-    () => config ? generatePnach(config.fields, values, config.label, config.filename) : '',
-    [config, values],
+    () => config ? generatePnach(config.fields, values, config.label, config.filename, activeCamera) : '',
+    [config, values, activeCamera],
   );
 
   if (!config) {
@@ -45,7 +44,14 @@ export default function App() {
   }
 
   const deadzoneFields = config.fields.filter((f): f is DeadzoneField => f.type === 'deadzone');
-  const transformFields = config.fields.filter((f): f is TransformField => f.type === 'transform');
+  const hasCameras = config.cameras && config.cameras.length > 0;
+
+  const cameraFields = hasCameras
+    ? config.fields.filter(f => f.type === 'transform')
+    : [];
+  const nonCameraFields = config.fields.filter(f =>
+    !(f.type === 'transform' && hasCameras),
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-850 via-blue-850 to-slate-800">
@@ -103,13 +109,39 @@ export default function App() {
         <aside className="flex flex-col gap-5 flex-1" style={{ minWidth: 0 }}>
           <GameSelector value={gameKey} onChange={switchGame} />
           <div className="flex-1 overflow-y-auto px-4" style={{ paddingRight: 'calc(0.25rem + 6px)' }}>
-            <TagGroup
-              fields={config.fields}
-              values={values}
-              onSetValue={setValue}
-              getPercent={getPercent}
-              onUpdatePercent={updatePercent}
-            />
+            {hasCameras ? (
+              <div className="flex flex-col gap-3">
+                <CameraGroup
+                  cameras={config.cameras!}
+                  activeCamera={activeCamera ?? config.cameras![0].id}
+                  onCameraChange={setActiveCamera}
+                  fields={cameraFields}
+                  values={values}
+                  onSetValue={setValue}
+                  getPercent={getPercent}
+                  onUpdatePercent={updatePercent}
+                />
+                <TagGroup
+                  fields={nonCameraFields}
+                  values={values}
+                  onSetValue={setValue}
+                  getPercent={getPercent}
+                  onUpdatePercent={updatePercent}
+                  tabGroups={config.tabGroups}
+                  activeCamera={activeCamera}
+                />
+              </div>
+            ) : (
+              <TagGroup
+                fields={config.fields}
+                values={values}
+                onSetValue={setValue}
+                getPercent={getPercent}
+                onUpdatePercent={updatePercent}
+                tabGroups={config.tabGroups}
+                activeCamera={activeCamera}
+              />
+            )}
           </div>
         </aside>
 
@@ -141,23 +173,6 @@ export default function App() {
                     />
                   );
                 })}
-              </div>
-            </div>
-          )}
-
-          {transformFields.length > 0 && (
-            <div
-              className="p-6 rounded-xl border"
-              style={{ background: 'rgba(14,16,38,0.5)', borderColor: 'rgba(80,90,160,0.12)' }}
-            >
-              <h3
-                className="font-sans text-xs font-semibold uppercase mb-5"
-                style={{ letterSpacing: '0.1em' }}
-              >
-                Camera Preview
-              </h3>
-              <div style={{ height: '280px', borderRadius: '8px', overflow: 'hidden' }}>
-                <CameraPreview fields={transformFields} values={values} />
               </div>
             </div>
           )}

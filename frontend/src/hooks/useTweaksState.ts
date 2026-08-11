@@ -1,12 +1,21 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { TweakValues, TweakValue, PercentField } from '../fields';
-import { gameConfigs } from '../config/games';
+import { gameConfigs, type CameraConfig } from '../config/games';
 import { getValueFromPercentage, getPercentageFromValue } from '../utils/percentMapping';
 
-function getFieldDefaults(fields: { getDefaults(): TweakValues }[]): TweakValues {
+function getFieldDefaults(fields: { getDefaults(): TweakValues }[], cameras?: CameraConfig[]): TweakValues {
   const values: TweakValues = {};
   for (const field of fields) {
     Object.assign(values, field.getDefaults());
+  }
+  if (cameras) {
+    for (const cam of cameras) {
+      for (const [fieldId, vec] of Object.entries(cam.defaults)) {
+        values[`${cam.id}${fieldId}X`] = vec[0];
+        values[`${cam.id}${fieldId}Y`] = vec[1];
+        values[`${cam.id}${fieldId}Z`] = vec[2];
+      }
+    }
   }
   return values;
 }
@@ -16,15 +25,22 @@ export function useTweaksState() {
 
   const config = useMemo(() => gameConfigs[gameKey], [gameKey]);
 
+  const cameras = config?.cameras;
+
+  const [activeCamera, setActiveCamera] = useState<string | undefined>(
+    cameras?.[0]?.id,
+  );
+
   const [values, setValues] = useState<TweakValues>(() =>
-    getFieldDefaults(config?.fields ?? []),
+    getFieldDefaults(config?.fields ?? [], config?.cameras),
   );
 
   const switchGame = useCallback((key: string) => {
     const cfg = gameConfigs[key];
     if (!cfg) return;
     setGameKey(key);
-    setValues(getFieldDefaults(cfg.fields));
+    setValues(getFieldDefaults(cfg.fields, cfg.cameras));
+    setActiveCamera(cfg.cameras?.[0]?.id);
   }, []);
 
   const setValue = useCallback((key: string, val: TweakValue) => {
@@ -32,7 +48,7 @@ export function useTweaksState() {
   }, []);
 
   const reset = useCallback(() => {
-    if (config) setValues(getFieldDefaults(config.fields));
+    if (config) setValues(getFieldDefaults(config.fields, config.cameras));
   }, [config]);
 
   const getPercent = useCallback((fieldId: string): number => {
@@ -62,7 +78,7 @@ export function useTweaksState() {
   }, [config]);
 
   return {
-    gameKey, config, values, switchGame, setValue, reset, getPercent, updatePercent,
+    gameKey, config, values, activeCamera, switchGame, setValue, reset, getPercent, updatePercent, setActiveCamera,
   };
 }
 

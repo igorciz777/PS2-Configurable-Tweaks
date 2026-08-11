@@ -31,6 +31,7 @@ export class TransformField extends FieldConfig {
   readonly default: [number, number, number];
   readonly step: number;
   readonly writes: TransformWrites;
+  readonly cameraWrites?: Record<string, TransformWrites>;
 
   constructor(data: FieldData) {
     super();
@@ -45,6 +46,7 @@ export class TransformField extends FieldConfig {
     this.default = (data.default as [number, number, number]) ?? [0, 0, 0];
     this.step = (data.step as number) ?? 0.01;
     this.writes = data.writes as TransformWrites;
+    this.cameraWrites = data.cameraWrites as Record<string, TransformWrites> | undefined;
   }
 
   getStateKeys(): string[] {
@@ -52,22 +54,33 @@ export class TransformField extends FieldConfig {
   }
 
   getDefaults(): TweakValues {
-    return {
+    const defaults: TweakValues = {
       [`${this.id}X`]: this.default[0],
       [`${this.id}Y`]: this.default[1],
       [`${this.id}Z`]: this.default[2],
     };
+    if (this.cameraWrites) {
+      for (const cam of Object.keys(this.cameraWrites)) {
+        defaults[`${cam}${this.id}X`] = this.default[0];
+        defaults[`${cam}${this.id}Y`] = this.default[1];
+        defaults[`${cam}${this.id}Z`] = this.default[2];
+      }
+    }
+    return defaults;
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, activeCamera?: string): PatchLine[] {
     const axes = ['x', 'y', 'z'] as const;
     const suffixes = ['X', 'Y', 'Z'] as const;
     const patches: PatchLine[] = [];
 
+    const writeSource: TransformWrites = (activeCamera && this.cameraWrites?.[activeCamera]) || this.writes;
+    const prefix = activeCamera && this.cameraWrites ? activeCamera : '';
+
     for (let i = 0; i < axes.length; i++) {
       const axis = axes[i];
-      const stateKey = `${this.id}${suffixes[i]}`;
-      const write = this.writes[axis];
+      const stateKey = `${prefix}${this.id}${suffixes[i]}`;
+      const write = writeSource[axis];
       const value = (values[stateKey] as number) ?? this.default[i];
       const hex = floatToHex(value);
 

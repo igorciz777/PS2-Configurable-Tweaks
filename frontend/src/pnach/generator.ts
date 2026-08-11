@@ -17,6 +17,7 @@ export function generatePnach(
   values: TweakValues,
   gameLabel: string,
   filename: string,
+  activeCamera?: string,
 ): string {
   const serial = extractSerial(filename);
   const lines: string[] = [];
@@ -27,7 +28,7 @@ export function generatePnach(
   const groups = new Map<string, GroupedField>();
 
   for (const field of fields) {
-    const raw = field.generatePatches(values);
+    const raw = field.generatePatches(values, activeCamera);
     const patchLines = raw.map(p => `patch=0,EE,${p.address},${p.type},${p.value}`);
     if (patchLines.length === 0) continue;
 

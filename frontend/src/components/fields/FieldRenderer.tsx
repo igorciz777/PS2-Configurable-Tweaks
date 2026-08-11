@@ -16,9 +16,10 @@ interface FieldRendererProps {
   onSetValue: (key: string, value: TweakValue) => void;
   getPercent: (fieldId: string) => number;
   onUpdatePercent: (fieldId: string, pct: number) => void;
+  activeCamera?: string;
 }
 
-export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdatePercent }: FieldRendererProps) {
+export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdatePercent, activeCamera }: FieldRendererProps) {
   const helpEl = field.help ? (
     <>
       <HelpIcon id={field.id} />
@@ -134,9 +135,10 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
 
     case 'transform': {
       const f = field as TransformField;
-      const xKey = `${f.id}X`;
-      const yKey = `${f.id}Y`;
-      const zKey = `${f.id}Z`;
+      const prefix = (activeCamera && f.cameraWrites?.[activeCamera]) ? activeCamera : '';
+      const xKey = `${prefix}${f.id}X`;
+      const yKey = `${prefix}${f.id}Y`;
+      const zKey = `${prefix}${f.id}Z`;
       const xVal = typeof values[xKey] === 'number' ? (values[xKey] as number) : f.default[0];
       const yVal = typeof values[yKey] === 'number' ? (values[yKey] as number) : f.default[1];
       const zVal = typeof values[zKey] === 'number' ? (values[zKey] as number) : f.default[2];

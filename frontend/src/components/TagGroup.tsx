@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { FieldConfig, TweakValues, TweakValue } from '../fields';
+import type { FieldConfig, TweakValues, TweakValue, TabGroupConfig } from '../fields';
 import { FieldRenderer } from './fields/FieldRenderer';
 
 interface TagGroupProps {
@@ -8,6 +8,8 @@ interface TagGroupProps {
   onSetValue: (key: string, value: TweakValue) => void;
   getPercent: (fieldId: string) => number;
   onUpdatePercent: (fieldId: string, pct: number) => void;
+  tabGroups?: TabGroupConfig[];
+  activeCamera?: string;
 }
 
 interface TreeNode {
@@ -55,8 +57,98 @@ const groupBorderHover = '1px solid rgba(80,90,160,0.2)';
 const headerBg = 'rgba(14,16,38,0.3)';
 const headerBorder = '1px solid rgba(80,90,160,0.1)';
 
+const tabRowStyle: React.CSSProperties = {
+  display: 'flex',
+  gap: '2px',
+  padding: '0 16px',
+  background: 'rgba(14,16,38,0.2)',
+  borderBottom: '1px solid rgba(80,90,160,0.08)',
+};
+
+function TabbedSection({
+  node,
+  tabGroup,
+  values,
+  onSetValue,
+  getPercent,
+  onUpdatePercent,
+  activeCamera,
+}: {
+  node: TreeNode;
+  tabGroup: TabGroupConfig;
+  values: TweakValues;
+  onSetValue: (key: string, value: TweakValue) => void;
+  getPercent: (fieldId: string) => number;
+  onUpdatePercent: (fieldId: string, pct: number) => void;
+  activeCamera?: string;
+}) {
+  const [activeTab, setActiveTab] = useState(0);
+
+  const allFieldsById = useMemo(() => {
+    const map = new Map<string, FieldConfig>();
+    for (const f of node.fields) map.set(f.id, f);
+    return map;
+  }, [node.fields]);
+
+  const activeFields = tabGroup.tabs[activeTab]?.fieldIds
+    .map(id => allFieldsById.get(id))
+    .filter((f): f is FieldConfig => f != null) ?? [];
+
+  return (
+    <div
+      className="overflow-hidden transition-colors rounded-xl"
+      style={{ border: groupBorder }}
+      onMouseEnter={e => { e.currentTarget.style.border = groupBorderHover; }}
+      onMouseLeave={e => { e.currentTarget.style.border = groupBorder; }}
+    >
+      <div
+        className="flex items-center gap-2.5 px-5 py-3"
+        style={{ background: headerBg, borderBottom: headerBorder }}
+      >
+        <span className="text-sm font-semibold uppercase tracking-wider" style={{ color: '#c0c4d8' }}>
+          {node.label}
+        </span>
+      </div>
+
+      <div style={tabRowStyle}>
+        {tabGroup.tabs.map((tab, i) => (
+          <button
+            key={tab.name}
+            onClick={() => setActiveTab(i)}
+            className="text-xs font-semibold uppercase tracking-wider px-3 py-2 transition-colors"
+            style={{
+              color: i === activeTab ? '#4a7dff' : '#6a6e94',
+              borderBottom: i === activeTab ? '2px solid #4a7dff' : '2px solid transparent',
+              background: i === activeTab ? 'rgba(74,125,255,0.05)' : 'transparent',
+            }}
+          >
+            {tab.name}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3">
+          {activeFields.map(field => (
+            <div key={field.id} style={(field.type === 'deadzone' || field.type === 'transform') ? { gridColumn: '1 / -1' } : undefined}>
+              <FieldRenderer
+                field={field}
+                values={values}
+                onSetValue={onSetValue}
+                getPercent={getPercent}
+                onUpdatePercent={onUpdatePercent}
+                activeCamera={activeCamera}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TreeNodeRow({
-  node, values, onSetValue, getPercent, onUpdatePercent, depth,
+  node, values, onSetValue, getPercent, onUpdatePercent, depth, tabGroups, activeCamera,
 }: {
   node: TreeNode;
   values: TweakValues;
@@ -64,10 +156,27 @@ function TreeNodeRow({
   getPercent: (fieldId: string) => number;
   onUpdatePercent: (fieldId: string, pct: number) => void;
   depth: number;
+  tabGroups?: TabGroupConfig[];
+  activeCamera?: string;
 }) {
   const [open, setOpen] = useState(true);
   const hasContent = node.fields.length > 0 || node.children.length > 0;
   if (!hasContent) return null;
+
+  const tabGroup = tabGroups?.find(tg => tg.path === node.fullPath);
+  if (tabGroup) {
+    return (
+      <TabbedSection
+        node={node}
+        tabGroup={tabGroup}
+        values={values}
+        onSetValue={onSetValue}
+        getPercent={getPercent}
+        onUpdatePercent={onUpdatePercent}
+        activeCamera={activeCamera}
+      />
+    );
+  }
 
   return (
     <div
@@ -103,7 +212,7 @@ function TreeNodeRow({
 
       {open && (
         <div style={{ padding: '16px' }}>
-              {node.fields.length > 0 && (
+          {node.fields.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 mb-3">
               {node.fields.map(field => (
                 <div key={field.id} style={(field.type === 'deadzone' || field.type === 'transform') ? { gridColumn: '1 / -1' } : undefined}>
@@ -113,6 +222,7 @@ function TreeNodeRow({
                     onSetValue={onSetValue}
                     getPercent={getPercent}
                     onUpdatePercent={onUpdatePercent}
+                    activeCamera={activeCamera}
                   />
                 </div>
               ))}
@@ -127,6 +237,8 @@ function TreeNodeRow({
                 getPercent={getPercent}
                 onUpdatePercent={onUpdatePercent}
                 depth={depth + 1}
+                tabGroups={tabGroups}
+                activeCamera={activeCamera}
               />
             </div>
           ))}
@@ -137,7 +249,7 @@ function TreeNodeRow({
 }
 
 export function TagGroup(props: TagGroupProps) {
-  const { fields, values, onSetValue, getPercent, onUpdatePercent } = props;
+  const { fields, values, onSetValue, getPercent, onUpdatePercent, tabGroups, activeCamera } = props;
   const { roots, ungrouped } = useMemo(() => buildTree(fields), [fields]);
 
   return (
@@ -151,6 +263,8 @@ export function TagGroup(props: TagGroupProps) {
           getPercent={getPercent}
           onUpdatePercent={onUpdatePercent}
           depth={0}
+          tabGroups={tabGroups}
+          activeCamera={activeCamera}
         />
       ))}
       {ungrouped.length > 0 && (
@@ -163,6 +277,7 @@ export function TagGroup(props: TagGroupProps) {
                 onSetValue={onSetValue}
                 getPercent={getPercent}
                 onUpdatePercent={onUpdatePercent}
+                activeCamera={activeCamera}
               />
             </div>
           ))}

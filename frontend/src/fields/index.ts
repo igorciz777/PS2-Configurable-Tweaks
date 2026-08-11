@@ -1,5 +1,5 @@
 export { FieldConfig } from './FieldConfig';
-export type { PatchLine, ValueWrite, FieldData, TweakValue, TweakValues } from './FieldConfig';
+export type { PatchLine, ValueWrite, FieldData, TweakValue, TweakValues, TabConfig, TabGroupConfig } from './FieldConfig';
 export { PercentField } from './PercentField';
 export { BooleanField } from './BooleanField';
 export { DeadzoneField } from './DeadzoneField';
