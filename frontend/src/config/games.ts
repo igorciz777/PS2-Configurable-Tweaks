@@ -1,6 +1,14 @@
 import { FieldConfig } from '../fields';
 import type { FieldData, TabGroupConfig } from '../fields';
 
+export interface RegionInfo {
+  label: string;
+  filename: string;
+  fieldIds?: string[];
+  cameras?: CameraConfig[];
+  tabGroups?: TabGroupConfig[];
+}
+
 export interface CameraConfig {
   id: string;
   label: string;
@@ -16,6 +24,7 @@ interface GameData {
   fields: FieldData[];
   tabGroups?: TabGroupConfig[];
   cameras?: CameraConfig[];
+  regions?: Record<string, RegionInfo>;
 }
 
 export interface GameEntry {
@@ -26,6 +35,7 @@ export interface GameEntry {
   fields: FieldConfig[];
   tabGroups?: TabGroupConfig[];
   cameras?: CameraConfig[];
+  regions?: Record<string, RegionInfo>;
 }
 
 const gameModules = import.meta.glob<GameData>('./games/**/*.json', { eager: true, import: 'default' });
@@ -38,7 +48,7 @@ for (const data of Object.values(gameModules)) {
   const fields = data.fields.map(fd => FieldConfig.fromJSON(fd));
   const entry: GameEntry = {
     id: data.id, label: data.label, filename: data.filename, group: data.group, fields,
-    tabGroups: data.tabGroups, cameras: data.cameras,
+    tabGroups: data.tabGroups, cameras: data.cameras, regions: data.regions,
   };
   parsed.push(entry);
   byId[data.id] = entry;

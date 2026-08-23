@@ -1,4 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress } from './regionResolver';
 
 export class ColorField extends FieldConfig {
   readonly type = 'color';
@@ -29,7 +30,7 @@ export class ColorField extends FieldConfig {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const hexColor = (values[this.id] as string) ?? this.default;
     const rgb = hexColor.replace('#', '');
     const r = parseInt(rgb.substring(0, 2), 16);
@@ -38,7 +39,7 @@ export class ColorField extends FieldConfig {
     const combined = (r << 16) | (g << 8) | b;
     const fullHex = combined.toString(16).toUpperCase().padStart(8, '0');
     return this.writes.map(w => ({
-      address: w.address,
+      address: resolveAddress(w.address, region),
       type: w.type,
       value: w.bits === 'lo' ? fullHex.substring(0, 4)
         : w.bits === 'hi' ? fullHex.substring(4, 8)

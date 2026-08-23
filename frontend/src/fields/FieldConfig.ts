@@ -14,8 +14,10 @@ export interface TabGroupConfig {
   tabs: TabConfig[];
 }
 
+export type AddressMap = Record<string, string | null>;
+
 export interface ValueWrite {
-  address: string;
+  address: string | AddressMap;
   type: 'word' | 'extended';
   bits?: 'lo' | 'hi' | 'full';
   hex?: string;
@@ -55,7 +57,7 @@ export abstract class FieldConfig {
 
   abstract getStateKeys(): string[];
   abstract getDefaults(): TweakValues;
-  abstract generatePatches(values: TweakValues, activeCamera?: string): PatchLine[];
+  abstract generatePatches(values: TweakValues, activeCamera?: string, region?: string): PatchLine[];
 
   static registry: Record<string, new (data: FieldData) => FieldConfig> = {};
 

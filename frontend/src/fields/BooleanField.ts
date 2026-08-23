@@ -1,4 +1,10 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress } from './regionResolver';
+
+interface BooleanWrites {
+  on: ValueWrite[];
+  off: ValueWrite[];
+}
 
 export class BooleanField extends FieldConfig {
   readonly type = 'boolean';
@@ -9,8 +15,7 @@ export class BooleanField extends FieldConfig {
   readonly author: string;
   readonly help: string;
   readonly default: boolean;
-  readonly onWrites: ValueWrite[];
-  readonly offWrites: ValueWrite[];
+  readonly writes: BooleanWrites;
 
   constructor(data: FieldData) {
     super();
@@ -21,8 +26,11 @@ export class BooleanField extends FieldConfig {
     this.author = (data.author as string) ?? '';
     this.help = (data.help as string) ?? '';
     this.default = (data.default as boolean) ?? false;
-    this.onWrites = (data.onWrites as ValueWrite[]) ?? [];
-    this.offWrites = (data.offWrites as ValueWrite[]) ?? [];
+    const w = data.writes as BooleanWrites | undefined;
+    this.writes = {
+      on: w?.on ?? [],
+      off: w?.off ?? [],
+    };
   }
 
   getStateKeys(): string[] {
@@ -33,11 +41,11 @@ export class BooleanField extends FieldConfig {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const active = values[this.id] === true;
-    const writes = active ? this.onWrites : this.offWrites;
+    const writes = active ? this.writes.on : this.writes.off;
     return writes.map(w => ({
-      address: w.address,
+      address: resolveAddress(w.address, region),
       type: w.type,
       value: w.hex ?? '00000000',
     }));

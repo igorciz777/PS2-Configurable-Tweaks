@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useTweaksState } from './hooks/useTweaksState';
 import { generatePnach } from './pnach';
 import { GameSelector } from './components/GameSelector';
+import { RegionSelector } from './components/RegionSelector';
 import { TagGroup } from './components/TagGroup';
 import { DeadzoneChart } from './components/DeadzoneChart';
 import { PnachOutput } from './components/PnachOutput';
@@ -19,15 +20,15 @@ const CHART_COLORS: Record<string, string> = {
 };
 
 export default function App() {
-  const { gameKey, config, values, activeCamera, switchGame, setValue, reset, getPercent, updatePercent, setActiveCamera } =
+  const { gameKey, config, values, activeCamera, activeRegion, resolvedFields, resolvedCameras, resolvedTabGroups, switchGame, setValue, reset, getPercent, updatePercent, setActiveCamera, setActiveRegion, resolvedFilename, resolvedLabel } =
     useTweaksState();
   const [patcherOpen, setPatcherOpen] = useState(false);
   const [patcherPnach, setPatcherPnach] = useState('');
   const [aboutOpen, setAboutOpen] = useState(false);
 
   const pnachContent = useMemo(
-    () => config ? generatePnach(config.fields, values, config.label, config.filename) : '',
-    [config, values],
+    () => config ? generatePnach(resolvedFields, values, resolvedLabel, resolvedFilename, activeRegion) : '',
+    [config, resolvedFields, values, resolvedLabel, resolvedFilename, activeRegion],
   );
 
   if (!config) {
@@ -43,13 +44,13 @@ export default function App() {
     );
   }
 
-  const deadzoneFields = config.fields.filter((f): f is DeadzoneField => f.type === 'deadzone');
-  const hasCameras = config.cameras && config.cameras.length > 0;
+  const deadzoneFields = resolvedFields.filter((f): f is DeadzoneField => f.type === 'deadzone');
+  const hasCameras = resolvedCameras && resolvedCameras.length > 0;
 
   const cameraFields = hasCameras
-    ? config.fields.filter(f => f.type === 'transform')
+    ? resolvedFields.filter(f => f.type === 'transform')
     : [];
-  const nonCameraFields = config.fields.filter(f =>
+  const nonCameraFields = resolvedFields.filter(f =>
     !(f.type === 'transform' && hasCameras),
   );
 
@@ -108,12 +109,19 @@ export default function App() {
         {/* ── Sidebar ── */}
         <aside className="flex flex-col gap-5 flex-1" style={{ minWidth: 0 }}>
           <GameSelector value={gameKey} onChange={switchGame} />
+          {config?.regions && activeRegion && (
+            <RegionSelector
+              regions={config.regions}
+              activeRegion={activeRegion}
+              onChange={setActiveRegion}
+            />
+          )}
           <div className="flex-1 overflow-y-auto px-4" style={{ paddingRight: 'calc(0.25rem + 6px)' }}>
             {hasCameras ? (
               <div className="flex flex-col gap-3">
                 <CameraGroup
-                  cameras={config.cameras!}
-                  activeCamera={activeCamera ?? config.cameras![0].id}
+                  cameras={resolvedCameras!}
+                  activeCamera={activeCamera ?? resolvedCameras![0].id}
                   onCameraChange={setActiveCamera}
                   fields={cameraFields}
                   values={values}
@@ -127,18 +135,18 @@ export default function App() {
                   onSetValue={setValue}
                   getPercent={getPercent}
                   onUpdatePercent={updatePercent}
-                  tabGroups={config.tabGroups}
+                  tabGroups={resolvedTabGroups}
                   activeCamera={activeCamera}
                 />
               </div>
             ) : (
               <TagGroup
-                fields={config.fields}
+                fields={resolvedFields}
                 values={values}
                 onSetValue={setValue}
                 getPercent={getPercent}
                 onUpdatePercent={updatePercent}
-                tabGroups={config.tabGroups}
+                tabGroups={resolvedTabGroups}
                 activeCamera={activeCamera}
               />
             )}
@@ -192,8 +200,8 @@ export default function App() {
 
           <ActionButtons
             pnachContent={pnachContent}
-            filename={config.filename}
-            gameLabel={config.label}
+            filename={resolvedFilename}
+            gameLabel={resolvedLabel}
             onReset={reset}
             onApplyToIso={(content) => { setPatcherPnach(content); setPatcherOpen(true); }}
           />

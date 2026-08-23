@@ -3,11 +3,13 @@ import {
   type PatchLine,
   type TweakValues,
   type FieldData,
+  type AddressMap,
 } from './FieldConfig';
 import { floatToHex } from './PercentField';
+import { resolveAddress } from './regionResolver';
 
 export interface TransformAxisWrite {
-  address: string;
+  address: string | AddressMap;
   type: 'word' | 'extended';
   bits?: 'lo' | 'hi' | 'full';
 }
@@ -69,7 +71,7 @@ export class TransformField extends FieldConfig {
     return defaults;
   }
 
-  generatePatches(values: TweakValues, activeCamera?: string): PatchLine[] {
+  generatePatches(values: TweakValues, activeCamera?: string, region?: string): PatchLine[] {
     const axes = ['x', 'y', 'z'] as const;
     const suffixes = ['X', 'Y', 'Z'] as const;
 
@@ -89,7 +91,7 @@ export class TransformField extends FieldConfig {
           case 'hi': val = hex.substring(4, 8); break;
           default: val = hex; break;
         }
-        patches.push({ address: write.address, type: write.type, value: val });
+        patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
       }
       return patches;
     }
@@ -111,7 +113,7 @@ export class TransformField extends FieldConfig {
             case 'hi': val = hex.substring(4, 8); break;
             default: val = hex; break;
           }
-          patches.push({ address: write.address, type: write.type, value: val });
+          patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
         }
       }
     } else {
@@ -127,7 +129,7 @@ export class TransformField extends FieldConfig {
           case 'hi': val = hex.substring(4, 8); break;
           default: val = hex; break;
         }
-        patches.push({ address: write.address, type: write.type, value: val });
+        patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
       }
     }
 

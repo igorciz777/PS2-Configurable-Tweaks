@@ -1,0 +1,58 @@
+{
+  "id": "enthusia",
+  "label": "Enthusia Professional Racing",
+  "group": "Konami",
+  "filename": "SLPM-65948_1167CC50.pnach",
+  "regions": {
+    "jp": { "label": "Enthusia Professional Racing (JP)", "filename": "SLPM-65948_1167CC50.pnach" },
+    "eu": { "label": "Enthusia Professional Racing (EU)", "filename": "SLES-53125_0E08DDE1.pnach" },
+    "us": { "label": "Enthusia Professional Racing (USA)", "filename": "SLUS-20967_382DE096.pnach" }
+  },
+  "fields": [
+    {
+      "type": "boolean",
+      "id": "disableSmoothing",
+      "label": "Disable Smoothing",
+      "tag": "Steering",
+      "comment": "Disables the smoothing filter applied to steering input",
+      "author": "igorciz777",
+      "default": false,
+      "writes": {
+        "on": [
+          {
+            "address": {
+              "jp": "00146690",
+              "eu": "00147cc0",
+              "us": "00146670"
+            },
+            "type": "word",
+            "hex": "46006006"
+          }
+        ]
+      }
+    },
+    {
+      "type": "boolean",
+      "id": "disableAngleLimit",
+      "label": "Disable Angle Limit",
+      "tag": "Steering",
+      "comment": "Disables the angle limit for steering input",
+      "help": "**Warning**: Might make the handling too twitchy",
+      "author": "igorciz777",
+      "default": false,
+      "writes": {
+        "on": [
+          {
+            "address": {
+              "jp": "0010b0a8",
+              "eu": "0010b0a8",
+              "us": "0010b0a8"
+            },
+            "type": "word",
+            "hex": "00000000"
+          }
+        ]
+      }
+    }
+  ]
+}

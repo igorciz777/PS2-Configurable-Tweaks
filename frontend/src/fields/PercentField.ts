@@ -1,4 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress } from './regionResolver';
 
 export function floatToHex(floatValue: number): string {
   const buffer = new ArrayBuffer(4);
@@ -8,10 +9,11 @@ export function floatToHex(floatValue: number): string {
   return hex === '0' ? '00000000' : hex;
 }
 
-export function generateValuePatches(writes: ValueWrite[], value: number): PatchLine[] {
+export function generateValuePatches(writes: ValueWrite[], value: number, region?: string): PatchLine[] {
   const fullHex = floatToHex(value);
   return writes.map(w => {
-    if (w.hex) return { address: w.address, type: w.type, value: w.hex };
+    const addr = resolveAddress(w.address, region);
+    if (w.hex) return { address: addr, type: w.type, value: w.hex };
     let val: string;
     switch (w.bits) {
       case 'lo': val = fullHex.substring(0, 4); break;
@@ -20,7 +22,7 @@ export function generateValuePatches(writes: ValueWrite[], value: number): Patch
       default: val = fullHex; break;
     }
     if (w.prefix) val = w.prefix + val;
-    return { address: w.address, type: w.type, value: val };
+    return { address: addr, type: w.type, value: val };
   });
 }
 
@@ -63,7 +65,7 @@ export class PercentField extends FieldConfig {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
-    return generateValuePatches(this.writes, values[this.id] as number);
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
+    return generateValuePatches(this.writes, values[this.id] as number, region);
   }
 }

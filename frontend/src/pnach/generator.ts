@@ -17,6 +17,7 @@ export function generatePnach(
   values: TweakValues,
   gameLabel: string,
   filename: string,
+  region?: string,
 ): string {
   const serial = extractSerial(filename);
   const lines: string[] = [];
@@ -27,8 +28,8 @@ export function generatePnach(
   const groups = new Map<string, GroupedField>();
 
   for (const field of fields) {
-    const raw = field.generatePatches(values);
-    const patchLines = raw.map(p => `patch=0,EE,${p.address},${p.type},${p.value}`);
+    const raw = field.generatePatches(values, undefined, region);
+    const patchLines = raw.map(p => `patch=1,EE,${p.address},${p.type},${p.value}`);
     if (patchLines.length === 0) continue;
 
     const tag = field.tag || field.id;

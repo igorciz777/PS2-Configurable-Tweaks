@@ -1,0 +1,407 @@
+{
+  "id": "kb2",
+  "label": "Kaido Battle 2 / Kaido Racer",
+  "group": "Genki",
+  "filename": "SLPM-66173_9E4ADAB9.pnach",
+  "tabGroups": [
+    {
+      "path": "Deadzone",
+      "tabs": [
+        { "name": "Steering", "fieldIds": ["steeringDeadzone"] },
+        { "name": "Throttle", "fieldIds": ["throttleDeadzone"] },
+        { "name": "Brake", "fieldIds": ["brakeDeadzone"] }
+      ]
+    }
+  ],
+  "regions": {
+    "jp": {
+      "label": "Kaido Battle 2 (JP)",
+      "filename": "SLPM-66173_9E4ADAB9.pnach"
+    },
+    "kr": {
+      "label": "Kaido Battle 2 (KR)",
+      "filename": "SLKA-25102_C55B9E65.pnach"
+    },
+    "eu": {
+      "label": "Kaido Racer (EU)",
+      "filename": "SLES-52749_0A6C521E.pnach"
+    }
+  },
+  "fields": [
+    {
+      "type": "percent",
+      "id": "smoothing",
+      "label": "Steering Smoothing",
+      "tag": "Steering",
+      "min": 0.0020825,
+      "max": 0.1666,
+      "default": 0.01666,
+      "step": 0.00001,
+      "isInverse": true,
+      "writes": [
+        {
+          "address": {
+            "jp": "101CE51C",
+            "kr": "101cd33c",
+            "eu": "101CE01C"
+          },
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "percent",
+      "id": "reduction",
+      "label": "Steering Reduction Effect",
+      "tag": "Steering",
+      "min": 0,
+      "max": 7.2,
+      "default": 3.6,
+      "step": 0.1,
+      "isInverse": false,
+      "writes": [
+        {
+          "address": {
+            "jp": "101706A0",
+            "kr": "10170730",
+            "eu": "1016C134"
+          },
+          "type": "extended",
+          "bits": "lo"
+        }
+      ]
+    },
+    {
+      "type": "deadzone",
+      "id": "steeringDeadzone",
+      "label": "Steering Deadzone",
+      "tag": "Steering",
+      "axis": "steering",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": {
+              "jp": "101c8780",
+              "kr": "101c7560",
+              "eu": "101c84a8"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c8784",
+              "kr": "101c7564",
+              "eu": "101c84ac"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": {
+              "jp": "101c8888",
+              "kr": "101c7588",
+              "eu": "101c84c4"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c888c",
+              "kr": "101c758c",
+              "eu": "101c84c8"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": {
+              "jp": "101c87c0",
+              "kr": "101c75a0",
+              "eu": "101c84e0"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c87c4",
+              "kr": "101c75a4",
+              "eu": "101c84e4"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "highMinusMid": [
+          {
+            "address": {
+              "jp": "101c87f0",
+              "kr": "101c75d0",
+              "eu": "101c8510"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c87f8",
+              "kr": "101c75d8",
+              "eu": "101c8518"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "throttleDeadzone",
+      "label": "Throttle Deadzone",
+      "tag": "Throttle",
+      "axis": "throttle",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": {
+              "jp": "101c8d90",
+              "kr": "101c7b70",
+              "eu": "101c8a58"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c8d94",
+              "kr": "101c7b74",
+              "eu": "101c8a5c"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": {
+              "jp": "101c8db8",
+              "kr": "101c7b98",
+              "eu": "101c8a74"
+            },
+            "type": "extended",
+            "bits": "lo"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": {
+              "jp": "101c8dd4",
+              "kr": "101c7bb4",
+              "eu": "101c8a90"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c8dd8",
+              "kr": "101c7bb8",
+              "eu": "101c8a94"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "deadzone",
+      "id": "brakeDeadzone",
+      "label": "Brake Deadzone",
+      "tag": "Brake",
+      "axis": "brake",
+      "ranges": {
+        "low": {
+          "min": 0,
+          "max": 1,
+          "default": 0.1,
+          "step": 0.01
+        },
+        "mid": {
+          "min": 0,
+          "max": 1,
+          "default": 0.5,
+          "step": 0.01
+        },
+        "high": {
+          "min": 0,
+          "max": 1,
+          "default": 0.9,
+          "step": 0.01
+        }
+      },
+      "writes": {
+        "low": [
+          {
+            "address": {
+              "jp": "101c8e60",
+              "kr": "101c7c40",
+              "eu": "101c8b20"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c8e64",
+              "kr": "101c7c44",
+              "eu": "101c8b24"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ],
+        "mid": [
+          {
+            "address": {
+              "jp": "101c8e88",
+              "kr": "101c7c68",
+              "eu": "101c8b3c"
+            },
+            "type": "extended",
+            "bits": "lo"
+          }
+        ],
+        "midMinusLow": [
+          {
+            "address": {
+              "jp": "101c8ea4",
+              "kr": "101c7c84",
+              "eu": "101c8b58"
+            },
+            "type": "extended",
+            "bits": "lo"
+          },
+          {
+            "address": {
+              "jp": "101c8ea8",
+              "kr": "101c7c88",
+              "eu": "101c8b5c"
+            },
+            "type": "extended",
+            "bits": "hi"
+          }
+        ]
+      }
+    },
+    {
+      "type": "dropdown",
+      "id": "freeCamera",
+      "label": "Freecam",
+      "tag": "Freecam",
+      "comment": "Replaces selected camera with freecam - controllable with 2nd port controller",
+      "help": "Enables free camera mode, allowing you to control the camera with a second controller.",
+      "author": "igorciz777",
+      "default": "3",
+      "options": [
+        { "value": "0", "label": "Replace 'Driver's' Camera" },
+        { "value": "1", "label": "Replace 'Behind' Camera" },
+        { "value": "2", "label": "Replace 'Rear' Camera" },
+        { "value": "3", "label": "Replace Replay Camera" }
+      ],
+      "writes": {
+        "0": [
+          {
+            "address": {
+              "jp": "00186e08",
+              "kr": "00186e28",
+              "eu": "00183b98"
+            },
+            "type": "word",
+            "hex": "27828bfc"
+          }
+        ],
+        "1": [
+          {
+            "address": {
+              "jp": "00186e18",
+              "kr": "00186e38",
+              "eu": "00183ba0"
+            },
+            "type": "word",
+            "hex": "27828bfc"
+          }
+        ],
+        "2": [
+          {
+            "address": {
+              "jp": "00186e28",
+              "kr": "00186e48",
+              "eu": "00183bac"
+            },
+            "type": "word",
+            "hex": "27828bfc"
+          }
+        ],
+        "3": [
+          {
+            "address": {
+              "jp": "00186e88",
+              "kr": "00186ea8",
+              "eu": "00183bf4"
+            },
+            "type": "word",
+            "hex": "27828bfc"
+          }
+        ]
+      }
+    }
+  ]
+}

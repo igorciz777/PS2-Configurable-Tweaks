@@ -1,22 +1,40 @@
 {
-  "id": "kr2",
-  "label": "Kaido Racer 2 (EU)",
-  "group": "Kaido Battle 3",
-  "filename": "SLES-53900_C7993BCC.pnach",
+  "id": "kb3",
+  "label": "Kaido Battle 3 / TXR: Drift 2",
+  "group": "Genki",
+  "filename": "SLPM-66022_EC33CA0D.pnach",
+  "regions": {
+    "jp": {
+      "label": "Kaido Battle 3 (JP)",
+      "filename": "SLPM-66022_EC33CA0D.pnach"
+    },
+    "eu": {
+      "label": "Kaido Racer 2 (EU)",
+      "filename": "SLES-53900_C7993BCC.pnach"
+    },
+    "us": {
+      "label": "TXR: Drift 2 (US)",
+      "filename": "SLUS-21394_B32E018E.pnach"
+    }
+  },
   "fields": [
     {
       "type": "percent",
       "id": "smoothing",
       "label": "Steering Smoothing",
       "tag": "Steering",
-      "min": 0.00833,
-      "max": 0.04165,
+      "min": 0.004165,
+      "max": 0.0833,
       "default": 0.01666,
       "step": 0.00001,
       "isInverse": true,
       "writes": [
         {
-          "address": "10171264",
+          "address": {
+            "jp": "101709e4",
+            "eu": "10171264",
+            "us": "101713F4"
+          },
           "type": "extended",
           "bits": "lo"
         }
@@ -34,13 +52,21 @@
       "isInverse": true,
       "writes": [
         {
-          "address": "0016caf0",
+          "address": {
+            "jp": "0016c270",
+            "eu": "0016caf0",
+            "us": "0016cc80"
+          },
           "type": "word",
           "bits": "lo",
           "prefix": "3C02"
         },
         {
-          "address": "0016caf4",
+          "address": {
+            "jp": "0016C274",
+            "eu": "0016caf4",
+            "us": "0016cc84"
+          },
           "type": "word",
           "hex": "44820800"
         }
@@ -75,21 +101,33 @@
       "writes": {
         "low": [
           {
-            "address": "003deac4",
+            "address": {
+              "jp": "003d54a4",
+              "eu": "003deac4",
+              "us": "003d6bc4"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "mid": [
           {
-            "address": "003deac8",
+            "address": {
+              "jp": "003d54a8",
+              "eu": "003deac8",
+              "us": "003d6bc8"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "high": [
           {
-            "address": "003deacc",
+            "address": {
+              "jp": "003d54ac",
+              "eu": "003deacc",
+              "us": "003d6bcc"
+            },
             "type": "word",
             "bits": "full"
           }
@@ -125,21 +163,33 @@
       "writes": {
         "low": [
           {
-            "address": "003dea70",
+            "address": {
+              "jp": "003d5450",
+              "eu": "003dea70",
+              "us": "003d6b70"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "mid": [
           {
-            "address": "003dea74",
+            "address": {
+              "jp": "003d5454",
+              "eu": "003dea74",
+              "us": "003d6b74"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "high": [
           {
-            "address": "003dea78",
+            "address": {
+              "jp": "003d5458",
+              "eu": "003dea78",
+              "us": "003d6b78"
+            },
             "type": "word",
             "bits": "full"
           }
@@ -175,23 +225,84 @@
       "writes": {
         "low": [
           {
-            "address": "003dea7c",
+            "address": {
+              "jp": "003d545c",
+              "eu": "003dea7c",
+              "us": "003d6b7c"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "mid": [
           {
-            "address": "003dea80",
+            "address": {
+              "jp": "003d5460",
+              "eu": "003dea80",
+              "us": "003d6b80"
+            },
             "type": "word",
             "bits": "full"
           }
         ],
         "high": [
           {
-            "address": "003dea84",
+            "address": {
+              "jp": "003d5464",
+              "eu": "003dea84",
+              "us": "003d6b84"
+            },
             "type": "word",
             "bits": "full"
+          }
+        ]
+      }
+    },
+    {
+      "type": "boolean",
+      "id": "staticDriverCamera",
+      "label": "Static Driver's Camera",
+      "tag": "Camera",
+      "comment": "Locks the camera to the driver's view, disables camera movement",
+      "author": "github.com/igorciz777",
+      "default": false,
+      "writes": {
+        "on": [
+          {
+            "address": {
+              "jp": "10139230",
+              "eu": "10139250",
+              "us": "10139330"
+            },
+            "type": "extended",
+            "hex": "0000"
+          },
+          {
+            "address": {
+              "jp": "10139238",
+              "eu": "10139258",
+              "us": "10139338"
+            },
+            "type": "extended",
+            "hex": "0000"
+          },
+          {
+            "address": {
+              "jp": "10139248",
+              "eu": "10139268",
+              "us": "10139348"
+            },
+            "type": "extended",
+            "hex": "3f80"
+          },
+          {
+            "address": {
+              "jp": "10139250",
+              "eu": "10139270",
+              "us": "10139350"
+            },
+            "type": "extended",
+            "hex": "0000"
           }
         ]
       }

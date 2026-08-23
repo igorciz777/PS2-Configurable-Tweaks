@@ -1,4 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress } from './regionResolver';
 
 export interface DropdownOption {
   value: string;
@@ -40,13 +41,13 @@ export class DropdownField extends FieldConfig {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const selected = (values[this.id] as string) ?? this.default;
     if (!this.patchIfNotDefault && selected === this.default) return [];
-    const writes = this.writes[selected];
-    if (!writes) return [];
-    return writes.map(w => ({
-      address: w.address,
+    const optionWrites = this.writes[selected];
+    if (!optionWrites) return [];
+    return optionWrites.map(w => ({
+      address: resolveAddress(w.address, region),
       type: w.type,
       value: w.hex ?? '00000000',
     }));

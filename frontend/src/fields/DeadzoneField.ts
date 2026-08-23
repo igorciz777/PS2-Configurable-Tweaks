@@ -1,5 +1,6 @@
 import { FieldConfig, type PatchLine, type TweakValues, type FieldData, type ValueWrite } from './FieldConfig';
 import { generateValuePatches } from './PercentField';
+import { resolveAddress } from './regionResolver';
 
 interface RangeDef {
   min: number;
@@ -25,7 +26,7 @@ export class DeadzoneField extends FieldConfig {
     midMinusLow?: ValueWrite[];
     highMinusMid?: ValueWrite[];
   };
-  readonly patches: ValueWrite[];
+  readonly staticPatches: ValueWrite[];
 
   constructor(data: FieldData) {
     super();
@@ -38,7 +39,7 @@ export class DeadzoneField extends FieldConfig {
     this.axis = data.axis as string;
     this.ranges = data.ranges as { low: RangeDef; mid: RangeDef; high: RangeDef };
     this.writes = (data.writes as DeadzoneField['writes']) ?? {};
-    this.patches = (data.patches as ValueWrite[]) ?? [];
+    this.staticPatches = (data.staticPatches as ValueWrite[]) ?? (data.patches as ValueWrite[]) ?? [];
   }
 
   getStateKeys(): string[] {
@@ -53,7 +54,7 @@ export class DeadzoneField extends FieldConfig {
     };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const low = (values[`${this.axis}Low`] as number) ?? 0;
     const mid = (values[`${this.axis}Mid`] as number) ?? 0.5;
     const high = (values[`${this.axis}High`] as number) ?? 1;
@@ -62,7 +63,7 @@ export class DeadzoneField extends FieldConfig {
     const out: PatchLine[] = [];
 
     const emit = (writes: ValueWrite[] | undefined, val: number) => {
-      if (writes) out.push(...generateValuePatches(writes, val));
+      if (writes) out.push(...generateValuePatches(writes, val, region));
     };
 
     emit(this.writes.low, low);
@@ -71,8 +72,8 @@ export class DeadzoneField extends FieldConfig {
     emit(this.writes.midMinusLow, midMinusLow);
     emit(this.writes.highMinusMid, highMinusMid);
 
-    for (const p of this.patches) {
-      out.push({ address: p.address, type: p.type, value: p.hex ?? '00000000' });
+    for (const p of this.staticPatches) {
+      out.push({ address: resolveAddress(p.address, region), type: p.type, value: p.hex ?? '00000000' });
     }
 
     return out;

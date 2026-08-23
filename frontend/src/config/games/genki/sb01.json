@@ -1,8 +1,13 @@
 {
   "id": "sb01",
-  "label": "Shutokou Battle 01",
-  "group": "Shutokou Battle 01",
+  "label": "Shutokou Battle 01 / Tokyo Xtreme Racer 3",
+  "group": "Genki",
   "filename": "SLPM-65308_DD70E38F.pnach",
+  "regions": {
+    "jp": { "label": "Shutokou Battle 01 (JP)", "filename": "SLPM-65308_DD70E38F.pnach" },
+    "us": { "label": "Tokyo Xtreme Racer 3", "filename": "SLUS-20831_0F932D81.pnach" },
+    "us_wf": { "label": "TXR3 (Whirlwind Fanfare fix)", "filename": "SLUS-20831_0F9348FF.pnach" }
+  },
   "fields": [
     {
       "type": "percent",
@@ -16,7 +21,11 @@
       "isInverse": true,
       "writes": [
         {
-          "address": "0032cdd8",
+          "address": {
+            "jp": "0032cdd8",
+            "us": "0032d258",
+            "us_wf": "0032d258"
+          },
           "type": "word",
           "bits": "full"
         }
@@ -34,7 +43,11 @@
       "isInverse": false,
       "writes": [
         {
-          "address": "10272784",
+          "address": {
+            "jp": "10272784",
+            "us": "10272D14",
+            "us_wf": "10272D14"
+          },
           "type": "extended",
           "bits": "lo"
         }
@@ -69,44 +82,76 @@
       "writes": {
         "low": [
           {
-            "address": "1018ef9c",
+            "address": {
+              "jp": "1018ef9c",
+              "us": "1018ebac",
+              "us_wf": "1018ebac"
+            },
             "type": "extended",
             "bits": "lo"
           },
           {
-            "address": "1018efa0",
+            "address": {
+              "jp": "1018efa0",
+              "us": "1018ebb0",
+              "us_wf": "1018ebb0"
+            },
             "type": "extended",
             "bits": "hi"
           },
           {
-            "address": "1018efcc",
+            "address": {
+              "jp": "1018efcc",
+              "us": "1018ebdc",
+              "us_wf": "1018ebdc"
+            },
             "type": "extended",
             "bits": "lo"
           },
           {
-            "address": "1018efd0",
+            "address": {
+              "jp": "1018efd0",
+              "us": "1018ebe0",
+              "us_wf": "1018ebe0"
+            },
             "type": "extended",
             "bits": "hi"
           }
         ],
         "high": [
           {
-            "address": "1018efa4",
+            "address": {
+              "jp": "1018efa4",
+              "us": "1018ebb4",
+              "us_wf": "1018ebb4"
+            },
             "type": "extended",
             "bits": "lo"
           },
           {
-            "address": "1018efa8",
+            "address": {
+              "jp": "1018efa8",
+              "us": "1018ebb8",
+              "us_wf": "1018ebb8"
+            },
             "type": "extended",
             "bits": "hi"
           },
           {
-            "address": "1018efd4",
+            "address": {
+              "jp": "1018efd4",
+              "us": "1018ebe4",
+              "us_wf": "1018ebe4"
+            },
             "type": "extended",
             "bits": "lo"
           },
           {
-            "address": "1018efd8",
+            "address": {
+              "jp": "1018efd8",
+              "us": "1018ebe8",
+              "us_wf": "1018ebe8"
+            },
             "type": "extended",
             "bits": "hi"
           }
