@@ -1,5 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
-import { resolveAddress } from './regionResolver';
+import { resolveAddress, resolveHex } from './regionResolver';
 
 interface BooleanWrites {
   on: ValueWrite[];
@@ -47,7 +47,7 @@ export class BooleanField extends FieldConfig {
     return writes.map(w => ({
       address: resolveAddress(w.address, region),
       type: w.type,
-      value: w.hex ?? '00000000',
+      value: resolveHex(w.hex, region),
     }));
   }
 }

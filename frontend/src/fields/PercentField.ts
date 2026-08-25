@@ -1,5 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
-import { resolveAddress } from './regionResolver';
+import { resolveAddress, resolveHex } from './regionResolver';
 
 export function floatToHex(floatValue: number): string {
   const buffer = new ArrayBuffer(4);
@@ -13,7 +13,7 @@ export function generateValuePatches(writes: ValueWrite[], value: number, region
   const fullHex = floatToHex(value);
   return writes.map(w => {
     const addr = resolveAddress(w.address, region);
-    if (w.hex) return { address: addr, type: w.type, value: w.hex };
+    if (w.hex) return { address: addr, type: w.type, value: resolveHex(w.hex, region) };
     let val: string;
     switch (w.bits) {
       case 'lo': val = fullHex.substring(0, 4); break;

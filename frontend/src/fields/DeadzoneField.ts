@@ -1,6 +1,6 @@
 import { FieldConfig, type PatchLine, type TweakValues, type FieldData, type ValueWrite } from './FieldConfig';
 import { generateValuePatches } from './PercentField';
-import { resolveAddress } from './regionResolver';
+import { resolveAddress, resolveHex } from './regionResolver';
 
 interface RangeDef {
   min: number;
@@ -73,7 +73,7 @@ export class DeadzoneField extends FieldConfig {
     emit(this.writes.highMinusMid, highMinusMid);
 
     for (const p of this.staticPatches) {
-      out.push({ address: resolveAddress(p.address, region), type: p.type, value: p.hex ?? '00000000' });
+      out.push({ address: resolveAddress(p.address, region), type: p.type, value: resolveHex(p.hex, region) });
     }
 
     return out;

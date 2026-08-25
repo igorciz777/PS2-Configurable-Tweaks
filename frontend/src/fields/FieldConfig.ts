@@ -20,7 +20,7 @@ export interface ValueWrite {
   address: string | AddressMap;
   type: 'word' | 'extended';
   bits?: 'lo' | 'hi' | 'full';
-  hex?: string;
+  hex?: string | AddressMap;
   prefix?: string;
 }
 

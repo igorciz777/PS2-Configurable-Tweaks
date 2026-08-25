@@ -2,7 +2,7 @@
   "id": "kb2",
   "label": "Kaido Battle 2 / Kaido Racer",
   "group": "Genki",
-  "filename": "SLPM-66173_9E4ADAB9.pnach",
+  "filename": "SLPM-65514_C37C1B76.pnach",
   "tabGroups": [
     {
       "path": "Deadzone",
@@ -16,15 +16,15 @@
   "regions": {
     "jp": {
       "label": "Kaido Battle 2 (JP)",
-      "filename": "SLPM-66173_9E4ADAB9.pnach"
+      "filename": "SLPM-65514_C37C1B76.pnach"
     },
     "kr": {
       "label": "Kaido Battle 2 (KR)",
-      "filename": "SLKA-25102_C55B9E65.pnach"
+      "filename": "SLKA-25146_D285B3DF.pnach"
     },
     "eu": {
       "label": "Kaido Racer (EU)",
-      "filename": "SLES-52749_0A6C521E.pnach"
+      "filename": "SLES-53191_F7780E06.pnach"
     }
   },
   "fields": [
@@ -349,12 +349,13 @@
       "comment": "Replaces selected camera with freecam - controllable with 2nd port controller",
       "help": "Enables free camera mode, allowing you to control the camera with a second controller.",
       "author": "igorciz777",
-      "default": "3",
+      "default": "4",
       "options": [
         { "value": "0", "label": "Replace 'Driver's' Camera" },
         { "value": "1", "label": "Replace 'Behind' Camera" },
         { "value": "2", "label": "Replace 'Rear' Camera" },
-        { "value": "3", "label": "Replace Replay Camera" }
+        { "value": "3", "label": "Replace Replay Camera" },
+        { "value": "4", "label": "Disabled" }
       ],
       "writes": {
         "0": [
@@ -365,7 +366,10 @@
               "eu": "00183b98"
             },
             "type": "word",
-            "hex": "27828bfc"
+            "hex": {
+              "_": "27828bfc",
+              "eu": "27828b1c"
+            }
           }
         ],
         "1": [
@@ -376,7 +380,10 @@
               "eu": "00183ba0"
             },
             "type": "word",
-            "hex": "27828bfc"
+            "hex": {
+              "_": "27828bfc",
+              "eu": "27828b1c"
+            }
           }
         ],
         "2": [
@@ -387,7 +394,10 @@
               "eu": "00183bac"
             },
             "type": "word",
-            "hex": "27828bfc"
+            "hex": {
+              "_": "27828bfc",
+              "eu": "27828b1c"
+            }
           }
         ],
         "3": [
@@ -398,7 +408,10 @@
               "eu": "00183bf4"
             },
             "type": "word",
-            "hex": "27828bfc"
+            "hex": {
+              "_": "27828bfc",
+              "eu": "27828b1c"
+            }
           }
         ]
       }

@@ -1,5 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
-import { resolveAddress } from './regionResolver';
+import { resolveAddress, resolveHex } from './regionResolver';
 
 export class IntegerField extends FieldConfig {
   readonly type = 'integer';
@@ -50,7 +50,7 @@ function intToHex(v: number, bytes: 2 | 4): string {
 export function generateIntPatches(writes: ValueWrite[], value: number, region?: string): PatchLine[] {
   return writes.map(w => {
     const addr = resolveAddress(w.address, region);
-    if (w.hex) return { address: addr, type: w.type, value: w.hex };
+    if (w.hex) return { address: addr, type: w.type, value: resolveHex(w.hex, region) };
     const isWord = w.type === 'word' || w.bits === 'full';
     const fullHex = intToHex(value, isWord ? 4 : 2);
     let val: string;
