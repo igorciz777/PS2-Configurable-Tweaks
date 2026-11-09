@@ -1,12 +1,12 @@
 import type { FieldConfig, TweakValues, TweakValue } from '../../fields';
-import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField, DropdownField } from '../../fields';
+import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, ColorField, DropdownField, TransformField } from '../../fields';
 import { PercentSlider } from './PercentSlider';
 import { CheckboxField } from './CheckboxField';
 import { DeadzoneGroup } from './DeadzoneGroup';
-import { FloatSlider } from './FloatSlider';
-import { IntegerSlider } from './IntegerSlider';
+import { SliderField } from './SliderField';
 import { ColorPickerField } from './ColorPicker';
 import { DropdownSelect } from './DropdownSelect';
+import { VectorInput } from './VectorInput';
 import { HelpIcon, HelpTooltip } from '../HelpTooltip';
 
 interface FieldRendererProps {
@@ -15,9 +15,10 @@ interface FieldRendererProps {
   onSetValue: (key: string, value: TweakValue) => void;
   getPercent: (fieldId: string) => number;
   onUpdatePercent: (fieldId: string, pct: number) => void;
+  activeCamera?: string;
 }
 
-export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdatePercent }: FieldRendererProps) {
+export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdatePercent, activeCamera }: FieldRendererProps) {
   const helpEl = field.help ? (
     <>
       <HelpIcon id={field.id} />
@@ -81,7 +82,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       const f = field as FloatField;
       const val = typeof values[f.id] === 'number' ? (values[f.id] as number) : f.default;
       return (
-        <FloatSlider
+        <SliderField
           label={f.label}
           helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
@@ -95,7 +96,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       const f = field as IntegerField;
       const val = typeof values[f.id] === 'number' ? (values[f.id] as number) : f.default;
       return (
-        <IntegerSlider
+        <SliderField
           label={f.label}
           helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
@@ -127,6 +128,32 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
           options={f.options}
           value={val}
           onChange={v => onSetValue(f.id, v)}
+        />
+      );
+    }
+
+    case 'transform': {
+      const f = field as TransformField;
+      const prefix = (activeCamera && f.cameraWrites?.[activeCamera]) ? activeCamera : '';
+      const xKey = `${prefix}${f.id}X`;
+      const yKey = `${prefix}${f.id}Y`;
+      const zKey = `${prefix}${f.id}Z`;
+      const xVal = typeof values[xKey] === 'number' ? (values[xKey] as number) : f.default[0];
+      const yVal = typeof values[yKey] === 'number' ? (values[yKey] as number) : f.default[1];
+      const zVal = typeof values[zKey] === 'number' ? (values[zKey] as number) : f.default[2];
+      return (
+        <VectorInput
+          label={f.label}
+          helpEl={helpEl}
+          min={f.min}
+          max={f.max}
+          step={f.step}
+          x={xVal}
+          y={yVal}
+          z={zVal}
+          onXChange={v => onSetValue(xKey, v)}
+          onYChange={v => onSetValue(yKey, v)}
+          onZChange={v => onSetValue(zKey, v)}
         />
       );
     }

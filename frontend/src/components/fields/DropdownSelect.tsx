@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import type { DropdownOption } from '../../fields/DropdownField';
+import { FieldCard } from './FieldCard';
+import { bodyStyle } from './fieldStyles';
 
 interface DropdownSelectProps {
   label: string;
@@ -8,32 +10,6 @@ interface DropdownSelectProps {
   value: string;
   onChange: (v: string) => void;
 }
-
-const cardStyle: React.CSSProperties = {
-  background: 'rgba(14,16,38,0.25)',
-  border: '1px solid rgba(80,90,160,0.08)',
-  borderRadius: '8px',
-  overflow: 'hidden',
-};
-
-const headerStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  padding: '10px 16px',
-};
-
-const labelStyle: React.CSSProperties = {
-  flex: 1,
-  fontSize: '0.75rem',
-  fontWeight: 500,
-  letterSpacing: '0.02em',
-  color: '#c0c4d8',
-};
-
-const bodyStyle: React.CSSProperties = {
-  padding: '8px 16px 16px',
-};
 
 const selectStyle: React.CSSProperties = {
   width: '100%',
@@ -51,24 +27,18 @@ const selectStyle: React.CSSProperties = {
 
 export function DropdownSelect({ label, helpEl, options, value, onChange }: DropdownSelectProps) {
   return (
-    <div style={cardStyle}>
-      <div style={headerStyle}>
-        <span style={labelStyle}>{label}</span>
-        {helpEl}
-      </div>
-      <div style={bodyStyle}>
-        <select
-          style={selectStyle}
-          value={value}
-          onChange={e => onChange(e.target.value)}
-          onFocus={e => { e.target.style.borderColor = 'rgba(74,125,255,0.5)'; }}
-          onBlur={e => { e.target.style.borderColor = 'rgba(80,90,160,0.15)'; }}
-        >
-          {options.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
-      </div>
-    </div>
+    <FieldCard label={label} helpEl={helpEl} bodyStyle={{ ...bodyStyle, padding: '8px 16px 16px' }}>
+      <select
+        style={selectStyle}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        onFocus={e => { e.target.style.borderColor = 'rgba(74,125,255,0.5)'; }}
+        onBlur={e => { e.target.style.borderColor = 'rgba(80,90,160,0.15)'; }}
+      >
+        {options.map(opt => (
+          <option key={opt.value} value={opt.value}>{opt.label}</option>
+        ))}
+      </select>
+    </FieldCard>
   );
 }

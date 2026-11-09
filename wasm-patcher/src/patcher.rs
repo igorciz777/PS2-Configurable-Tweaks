@@ -15,10 +15,13 @@ pub fn compute_patch_locations(
 
         let mut found = false;
         for ph in &elf_info.program_headers {
+            if ph.typ != 1 {
+                continue;
+            }
             let ph_start = ph.virt_addr;
             let ph_end = ph.virt_addr + ph.file_size;
 
-            if ph_start <= adjusted_address && ph_end > adjusted_address + (size as u32) {
+            if ph_start <= adjusted_address && ph_end >= adjusted_address + (size as u32) {
                 let file_offset = elf_offset
                     + ph.offset as u64
                     + (adjusted_address - ph.virt_addr) as u64;

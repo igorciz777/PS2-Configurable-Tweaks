@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ensureWasm, findElfOffset, analyzeElf, parsePnach } from '../wasm';
-import type { ParsedPatch, ProgramHeader, PatchInfo } from '../wasm';
+import { ensureWasm, runComputePatches } from '../wasm';
 import streamSaver from 'streamsaver';
 import * as ponyfill from 'web-streams-polyfill';
 
@@ -177,44 +176,6 @@ function formatSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-function getPatchDataSize(length: string, address: number): number {
-  switch (length) {
-    case 'byte': case '_byte': return 1;
-    case 'short': case '_short': return 2;
-    case 'word': case '_word': return 4;
-    case 'extended': case '_extended':
-      if (address & 0x20000000) return 4;
-      if (address & 0x10000000) return 2;
-      return 1;
-    default: return 4;
-  }
-}
-
-function computePatchLocations(
-  patches: ParsedPatch[],
-  programHeaders: ProgramHeader[],
-  elfOffset: number,
-): PatchInfo[] {
-  const locations: PatchInfo[] = [];
-  for (const p of patches) {
-    const adjustedAddress = p.address & 0x0FFF_FFFF;
-    const size = getPatchDataSize(p.length, p.address);
-    for (const ph of programHeaders) {
-      const phStart = ph.virt_addr;
-      const phEnd = ph.virt_addr + ph.file_size;
-      if (phStart <= adjustedAddress && phEnd > adjustedAddress + size) {
-        locations.push({
-          offset: elfOffset + ph.offset + (adjustedAddress - ph.virt_addr),
-          value: p.data,
-          size,
-        });
-        break;
-      }
-    }
-  }
-  return locations;
-}
-
 interface PnachPatcherModalProps {
   initialPnachText?: string;
   onClose: () => void;
@@ -273,33 +234,33 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
     setPatching(true);
     setLog([]);
 
+    let writer: WritableStreamDefaultWriter<Uint8Array> | undefined;
+
     try {
       addLog('Initializing WASM module...', 'stage');
       await ensureWasm();
       addLog('WASM module loaded', 'ok');
 
-      addLog(`Scanning ELF in first ${formatSize(SCAN_SIZE)} of ISO...`, 'stage');
+      addLog(`Scanning ELF and computing patch locations in first ${formatSize(SCAN_SIZE)} of ISO...`, 'stage');
       const scanSize = Math.min(SCAN_SIZE, isoFile.size);
       const prefix = new Uint8Array(await isoFile.slice(0, scanSize).arrayBuffer());
 
-      const elfInfo = findElfOffset(prefix);
-      addLog(`ELF found at offset 0x${elfInfo.offset.toString(16).toUpperCase()}`, 'ok');
+      const { patches: locations, elf_offset } = runComputePatches(prefix, pnachText);
+      addLog(`ELF found at offset 0x${elf_offset.toString(16).toUpperCase()}`, 'ok');
+      addLog(`${locations.length} patch(es) resolved to ISO offsets`, 'ok');
 
-      addLog('Parsing ELF program headers...', 'info');
-      const elfData = analyzeElf(prefix, elfInfo.offset);
-      addLog(`ELF has ${elfData.program_headers.length} program header(s)`, 'info');
-
-      addLog('Parsing PNACH patches...', 'info');
-      const parsedPatches = parsePnach(pnachText);
-      addLog(`${parsedPatches.length} patch(es) parsed`, 'info');
-
-      const locations = computePatchLocations(parsedPatches, elfData.program_headers, elfInfo.offset);
-      if (locations.length === 0) {
-        addLog('No patches could be applied - no matching addresses found', 'error');
-        setPatching(false);
+      const oversized = locations.find(p =>
+        (p.size === 1 && p.value > 0xff) ||
+        (p.size === 2 && p.value > 0xffff),
+      );
+      if (oversized) {
+        addLog(
+          `Error: patch value 0x${oversized.value.toString(16).toUpperCase()} does not fit in ${oversized.size} byte(s)`,
+          'error',
+        );
         return;
       }
-      addLog(`${locations.length} patch(es) resolved to ISO offsets`, 'ok');
+
       for (const loc of locations) {
         addLog(`  Patch at ISO offset 0x${loc.offset.toString(16).toUpperCase()} = 0x${loc.value.toString(16).toUpperCase()} (${loc.size} byte(s))`, 'info');
       }
@@ -307,7 +268,7 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
       addLog(`Streaming ${formatSize(isoFile.size)} in ${formatSize(CHUNK_SIZE)} chunks...`, 'stage');
       const outputName = isoFile.name.replace(/\.iso$/i, '_patched.iso');
       const fileStream = streamSaver.createWriteStream(outputName, { size: isoFile.size });
-      const writer = fileStream.getWriter();
+      writer = fileStream.getWriter();
 
       let offset = 0;
       let patchedCount = 0;
@@ -337,10 +298,19 @@ export function PnachPatcherModal({ initialPnachText, onClose }: PnachPatcherMod
       }
 
       await writer.close();
+      writer = undefined;
       addLog(`${patchedCount} patch(es) applied. Saved as: ${outputName}`, 'ok');
       addLog('Done!', 'ok');
     } catch (err: any) {
+      if (writer) {
+        try {
+          await writer.abort();
+        } catch {
+          // Stream already closed; nothing to abort.
+        }
+      }
       addLog(`Error: ${err.message || err}`, 'error');
+      addLog('Patching aborted. Any saved output file is incomplete.', 'error');
     } finally {
       setPatching(false);
     }

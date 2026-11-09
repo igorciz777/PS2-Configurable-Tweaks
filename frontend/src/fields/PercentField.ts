@@ -1,4 +1,5 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress, resolveHex } from './regionResolver';
 
 export function floatToHex(floatValue: number): string {
   const buffer = new ArrayBuffer(4);
@@ -8,19 +9,23 @@ export function floatToHex(floatValue: number): string {
   return hex === '0' ? '00000000' : hex;
 }
 
-export function generateValuePatches(writes: ValueWrite[], value: number): PatchLine[] {
+export function sliceHex(fullHex: string, bits?: 'lo' | 'hi' | 'full'): string {
+  switch (bits) {
+    case 'lo': return fullHex.substring(0, 4);
+    case 'hi': return fullHex.substring(4, 8);
+    case 'full':
+    default: return fullHex;
+  }
+}
+
+export function generateValuePatches(writes: ValueWrite[], value: number, region?: string): PatchLine[] {
   const fullHex = floatToHex(value);
   return writes.map(w => {
-    if (w.hex) return { address: w.address, type: w.type, value: w.hex };
-    let val: string;
-    switch (w.bits) {
-      case 'lo': val = fullHex.substring(0, 4); break;
-      case 'hi': val = fullHex.substring(4, 8); break;
-      case 'full':
-      default: val = fullHex; break;
-    }
+    const addr = resolveAddress(w.address, region);
+    if (w.hex) return { address: addr, type: w.type, value: resolveHex(w.hex, region) };
+    let val = sliceHex(fullHex, w.bits);
     if (w.prefix) val = w.prefix + val;
-    return { address: w.address, type: w.type, value: val };
+    return { address: addr, type: w.type, value: val };
   });
 }
 
@@ -55,15 +60,11 @@ export class PercentField extends FieldConfig {
     this.writes = data.writes as ValueWrite[];
   }
 
-  getStateKeys(): string[] {
-    return [this.id];
-  }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
-    return generateValuePatches(this.writes, values[this.id] as number);
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
+    return generateValuePatches(this.writes, values[this.id] as number, region);
   }
 }

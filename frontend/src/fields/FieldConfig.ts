@@ -4,11 +4,23 @@ export interface PatchLine {
   value: string;
 }
 
+export interface TabConfig {
+  name: string;
+  fieldIds: string[];
+}
+
+export interface TabGroupConfig {
+  path: string;
+  tabs: TabConfig[];
+}
+
+export type AddressMap = Record<string, string | null>;
+
 export interface ValueWrite {
-  address: string;
+  address: string | AddressMap;
   type: 'word' | 'extended';
   bits?: 'lo' | 'hi' | 'full';
-  hex?: string;
+  hex?: string | AddressMap;
   prefix?: string;
 }
 
@@ -43,9 +55,8 @@ export abstract class FieldConfig {
   abstract readonly author: string;
   abstract readonly help: string;
 
-  abstract getStateKeys(): string[];
   abstract getDefaults(): TweakValues;
-  abstract generatePatches(values: TweakValues): PatchLine[];
+  abstract generatePatches(values: TweakValues, activeCamera?: string, region?: string): PatchLine[];
 
   static registry: Record<string, new (data: FieldData) => FieldConfig> = {};
 

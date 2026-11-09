@@ -1,4 +1,6 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
+import { resolveAddress, resolveHex } from './regionResolver';
+import { sliceHex } from './PercentField';
 
 export class IntegerField extends FieldConfig {
   readonly type = 'integer';
@@ -29,15 +31,13 @@ export class IntegerField extends FieldConfig {
     this.writes = data.writes as ValueWrite[];
   }
 
-  getStateKeys(): string[] { return [this.id]; }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const v = (values[this.id] as number) ?? this.default;
-    return generateIntPatches(this.writes, v);
+    return generateIntPatches(this.writes, v, region);
   }
 }
 
@@ -46,19 +46,14 @@ function intToHex(v: number, bytes: 2 | 4): string {
   return hex;
 }
 
-export function generateIntPatches(writes: ValueWrite[], value: number): PatchLine[] {
+export function generateIntPatches(writes: ValueWrite[], value: number, region?: string): PatchLine[] {
   return writes.map(w => {
-    if (w.hex) return { address: w.address, type: w.type, value: w.hex };
+    const addr = resolveAddress(w.address, region);
+    if (w.hex) return { address: addr, type: w.type, value: resolveHex(w.hex, region) };
     const isWord = w.type === 'word' || w.bits === 'full';
     const fullHex = intToHex(value, isWord ? 4 : 2);
-    let val: string;
-    switch (w.bits) {
-      case 'lo': val = fullHex.substring(0, 4); break;
-      case 'hi': val = fullHex.substring(4, 8); break;
-      case 'full':
-      default: val = fullHex; break;
-    }
+    let val = sliceHex(fullHex, w.bits);
     if (w.prefix) val = w.prefix + val;
-    return { address: w.address, type: w.type, value: val };
+    return { address: addr, type: w.type, value: val };
   });
 }

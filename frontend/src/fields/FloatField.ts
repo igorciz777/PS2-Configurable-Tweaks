@@ -30,13 +30,11 @@ export class FloatField extends FieldConfig {
     this.writes = data.writes as ValueWrite[];
   }
 
-  getStateKeys(): string[] { return [this.id]; }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }
 
-  generatePatches(values: TweakValues): PatchLine[] {
-    return generateValuePatches(this.writes, values[this.id] as number ?? this.default);
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
+    return generateValuePatches(this.writes, values[this.id] as number ?? this.default, region);
   }
 }

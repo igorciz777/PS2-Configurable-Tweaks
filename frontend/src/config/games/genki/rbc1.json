@@ -1,8 +1,12 @@
 {
   "id": "rbc1",
   "label": "Racing Battle C1 Grand Prix",
-  "group": "RACING BATTLE C1 Grand Prix",
+  "group": "Genki",
   "filename": "SLPM-65897_1C087362.pnach",
+  "regions": {
+    "original": { "label": "Original (JP)", "filename": "SLPM-65897_1C087362.pnach" },
+    "english": { "label": "English Patch", "filename": "SLPM-65897_9C4C9611.pnach" }
+  },
   "fields": [
     {
       "type": "percent",

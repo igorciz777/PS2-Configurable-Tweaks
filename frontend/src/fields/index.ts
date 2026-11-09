@@ -1,5 +1,5 @@
 export { FieldConfig } from './FieldConfig';
-export type { PatchLine, ValueWrite, FieldData, TweakValue, TweakValues } from './FieldConfig';
+export type { PatchLine, ValueWrite, FieldData, TweakValue, TweakValues, TabConfig, TabGroupConfig } from './FieldConfig';
 export { PercentField } from './PercentField';
 export { BooleanField } from './BooleanField';
 export { DeadzoneField } from './DeadzoneField';
@@ -7,5 +7,7 @@ export { FloatField } from './FloatField';
 export { IntegerField } from './IntegerField';
 export { ColorField } from './ColorField';
 export { DropdownField } from './DropdownField';
+export { TransformField } from './TransformField';
+export type { TransformWrites, TransformAxisWrite } from './TransformField';
 export { generateValuePatches } from './PercentField';
 import './registry';

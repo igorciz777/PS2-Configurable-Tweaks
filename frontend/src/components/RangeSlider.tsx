@@ -37,7 +37,10 @@ export function RangeSlider({
           style={{ width: '72px', padding: '6px 8px', textAlign: 'center' }}
           min={min} max={max} step={step}
           value={value}
-          onChange={e => onChange(parseFloat(e.target.value) || 0)}
+          onChange={e => {
+            const v = parseFloat(e.target.value) || 0;
+            onChange(Math.min(Math.max(v, min), max));
+          }}
         />
       </div>
     </div>
