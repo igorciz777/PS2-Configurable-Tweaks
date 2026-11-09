@@ -5,7 +5,7 @@ import {
   type FieldData,
   type AddressMap,
 } from './FieldConfig';
-import { floatToHex } from './PercentField';
+import { floatToHex, sliceHex } from './PercentField';
 import { resolveAddress } from './regionResolver';
 
 export interface TransformAxisWrite {
@@ -51,10 +51,6 @@ export class TransformField extends FieldConfig {
     this.cameraWrites = data.cameraWrites as Record<string, TransformWrites> | undefined;
   }
 
-  getStateKeys(): string[] {
-    return [`${this.id}X`, `${this.id}Y`, `${this.id}Z`];
-  }
-
   getDefaults(): TweakValues {
     const defaults: TweakValues = {
       [`${this.id}X`]: this.default[0],
@@ -71,66 +67,20 @@ export class TransformField extends FieldConfig {
     return defaults;
   }
 
-  generatePatches(values: TweakValues, activeCamera?: string, region?: string): PatchLine[] {
+  generatePatches(values: TweakValues, _activeCamera?: string, region?: string): PatchLine[] {
     const axes = ['x', 'y', 'z'] as const;
     const suffixes = ['X', 'Y', 'Z'] as const;
 
-    if (activeCamera && this.cameraWrites?.[activeCamera]) {
-      const writeSource = this.cameraWrites[activeCamera];
-      const prefix = activeCamera;
-      const patches: PatchLine[] = [];
-      for (let i = 0; i < axes.length; i++) {
-        const axis = axes[i];
-        const stateKey = `${prefix}${this.id}${suffixes[i]}`;
-        const write = writeSource[axis];
-        const value = (values[stateKey] as number) ?? this.default[i];
-        const hex = floatToHex(value);
-        let val: string;
-        switch (write.bits) {
-          case 'lo': val = hex.substring(0, 4); break;
-          case 'hi': val = hex.substring(4, 8); break;
-          default: val = hex; break;
-        }
-        patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
-      }
-      return patches;
-    }
-
     const patches: PatchLine[] = [];
 
-    if (this.cameraWrites) {
-      for (const cam of Object.keys(this.cameraWrites)) {
-        const writeSource = this.cameraWrites[cam];
-        for (let i = 0; i < axes.length; i++) {
-          const axis = axes[i];
-          const stateKey = `${cam}${this.id}${suffixes[i]}`;
-          const write = writeSource[axis];
-          const value = (values[stateKey] as number) ?? this.default[i];
-          const hex = floatToHex(value);
-          let val: string;
-          switch (write.bits) {
-            case 'lo': val = hex.substring(0, 4); break;
-            case 'hi': val = hex.substring(4, 8); break;
-            default: val = hex; break;
-          }
-          patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
-        }
-      }
-    } else {
-      for (let i = 0; i < axes.length; i++) {
-        const axis = axes[i];
-        const stateKey = `${this.id}${suffixes[i]}`;
-        const write = this.writes[axis];
-        const value = (values[stateKey] as number) ?? this.default[i];
-        const hex = floatToHex(value);
-        let val: string;
-        switch (write.bits) {
-          case 'lo': val = hex.substring(0, 4); break;
-          case 'hi': val = hex.substring(4, 8); break;
-          default: val = hex; break;
-        }
-        patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
-      }
+    for (let i = 0; i < axes.length; i++) {
+      const axis = axes[i];
+      const stateKey = `${this.id}${suffixes[i]}`;
+      const write = this.writes[axis];
+      const value = (values[stateKey] as number) ?? this.default[i];
+      const hex = floatToHex(value);
+      const val = sliceHex(hex, write.bits);
+      patches.push({ address: resolveAddress(write.address, region), type: write.type, value: val });
     }
 
     return patches;

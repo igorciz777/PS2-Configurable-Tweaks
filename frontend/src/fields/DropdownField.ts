@@ -33,10 +33,6 @@ export class DropdownField extends FieldConfig {
     this.patchIfNotDefault = (data.patchIfNotDefault as boolean) ?? false;
   }
 
-  getStateKeys(): string[] {
-    return [this.id];
-  }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }

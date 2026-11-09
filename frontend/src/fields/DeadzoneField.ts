@@ -42,10 +42,6 @@ export class DeadzoneField extends FieldConfig {
     this.staticPatches = (data.staticPatches as ValueWrite[]) ?? (data.patches as ValueWrite[]) ?? [];
   }
 
-  getStateKeys(): string[] {
-    return [`${this.axis}Low`, `${this.axis}Mid`, `${this.axis}High`];
-  }
-
   getDefaults(): TweakValues {
     return {
       [`${this.axis}Low`]: this.ranges.low.default,

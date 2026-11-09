@@ -1,5 +1,6 @@
 import { FieldConfig, type ValueWrite, type PatchLine, type TweakValues, type FieldData } from './FieldConfig';
 import { resolveAddress } from './regionResolver';
+import { sliceHex } from './PercentField';
 
 export class ColorField extends FieldConfig {
   readonly type = 'color';
@@ -24,8 +25,6 @@ export class ColorField extends FieldConfig {
     this.writes = data.writes as ValueWrite[];
   }
 
-  getStateKeys(): string[] { return [this.id]; }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }
@@ -41,9 +40,7 @@ export class ColorField extends FieldConfig {
     return this.writes.map(w => ({
       address: resolveAddress(w.address, region),
       type: w.type,
-      value: w.bits === 'lo' ? fullHex.substring(0, 4)
-        : w.bits === 'hi' ? fullHex.substring(4, 8)
-        : fullHex,
+      value: sliceHex(fullHex, w.bits),
     }));
   }
 

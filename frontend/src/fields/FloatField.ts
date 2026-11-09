@@ -30,8 +30,6 @@ export class FloatField extends FieldConfig {
     this.writes = data.writes as ValueWrite[];
   }
 
-  getStateKeys(): string[] { return [this.id]; }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }

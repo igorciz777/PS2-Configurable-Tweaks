@@ -36,7 +36,13 @@ function initFromUrl(): { gameKey: string; activeRegion: string | undefined; val
     : config?.cameras;
 
   const defaults = getFieldDefaults(regionFields, regionCameras);
-  const values = url.values ? { ...defaults, ...url.values } : defaults;
+  // Only accept URL values that match a known field and its default type.
+  const values = { ...defaults };
+  if (url.values) {
+    for (const [k, v] of Object.entries(url.values)) {
+      if (k in defaults && typeof v === typeof defaults[k]) values[k] = v;
+    }
+  }
   const activeCamera = regionCameras?.[0]?.id;
 
   return { gameKey, activeRegion, values, activeCamera };
@@ -128,8 +134,7 @@ export function useTweaksState() {
   }, [config, resolvedFields, resolvedCameras]);
 
   const getPercent = useCallback((fieldId: string): number => {
-    const fields = config?.fields ?? [];
-    const field = fields.find(f => f.id === fieldId);
+    const field = resolvedFields.find(f => f.id === fieldId);
     if (!field || field.type !== 'percent') return 50;
     const val = values[fieldId];
     if (typeof val !== 'number') return 50;
@@ -139,11 +144,10 @@ export function useTweaksState() {
       val,
     );
     return pct;
-  }, [config, values]);
+  }, [resolvedFields, values]);
 
   const updatePercent = useCallback((fieldId: string, percent: number) => {
-    const fields = config?.fields ?? [];
-    const field = fields.find(f => f.id === fieldId);
+    const field = resolvedFields.find(f => f.id === fieldId);
     if (!field || field.type !== 'percent') return;
     const pf = field as PercentField;
     const gameValue = getValueFromPercentage(
@@ -151,7 +155,7 @@ export function useTweaksState() {
       percent, 200,
     );
     setValues(prev => ({ ...prev, [fieldId]: gameValue }));
-  }, [config]);
+  }, [resolvedFields]);
 
   return {
     gameKey, config, values, activeCamera, activeRegion,

@@ -9,18 +9,21 @@ export function floatToHex(floatValue: number): string {
   return hex === '0' ? '00000000' : hex;
 }
 
+export function sliceHex(fullHex: string, bits?: 'lo' | 'hi' | 'full'): string {
+  switch (bits) {
+    case 'lo': return fullHex.substring(0, 4);
+    case 'hi': return fullHex.substring(4, 8);
+    case 'full':
+    default: return fullHex;
+  }
+}
+
 export function generateValuePatches(writes: ValueWrite[], value: number, region?: string): PatchLine[] {
   const fullHex = floatToHex(value);
   return writes.map(w => {
     const addr = resolveAddress(w.address, region);
     if (w.hex) return { address: addr, type: w.type, value: resolveHex(w.hex, region) };
-    let val: string;
-    switch (w.bits) {
-      case 'lo': val = fullHex.substring(0, 4); break;
-      case 'hi': val = fullHex.substring(4, 8); break;
-      case 'full':
-      default: val = fullHex; break;
-    }
+    let val = sliceHex(fullHex, w.bits);
     if (w.prefix) val = w.prefix + val;
     return { address: addr, type: w.type, value: val };
   });
@@ -55,10 +58,6 @@ export class PercentField extends FieldConfig {
     this.step = (data.step as number) ?? 0.01;
     this.isInverse = (data.isInverse as boolean) ?? false;
     this.writes = data.writes as ValueWrite[];
-  }
-
-  getStateKeys(): string[] {
-    return [this.id];
   }
 
   getDefaults(): TweakValues {

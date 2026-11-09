@@ -23,13 +23,28 @@ pub fn find_elf_in_iso(iso_data: &[u8]) -> Result<ElfFileInfo, String> {
         return Err("ISO data too small".to_string());
     }
 
-    // Read Primary Volume Descriptor at sector 16
-    let pvd_offset = (PVD_SECTOR * SECTOR_SIZE) as usize;
-    let pvd = &iso_data[pvd_offset..];
-
-    if pvd[0] != 1 || &pvd[1..6] != b"CD001" {
-        return Err("Invalid Primary Volume Descriptor".to_string());
+    let mut pvd: Option<&[u8]> = None;
+    for lsn in PVD_SECTOR..100 {
+        let start = (lsn * SECTOR_SIZE) as usize;
+        let end = start + SECTOR_SIZE as usize;
+        if end > iso_data.len() {
+            break;
+        }
+        let sector = &iso_data[start..end];
+        if &sector[1..6] != b"CD001" {
+            break;
+        }
+        match sector[0] {
+            1 => {
+                pvd = Some(sector);
+                break;
+            }
+            255 => break,
+            _ => continue,
+        }
     }
+
+    let pvd = pvd.ok_or("Invalid Primary Volume Descriptor")?;
 
     // Root Directory Record starts at offset 156 in PVD
     // Location of Extent: LE bytes at offset 158 (2 + 4 bytes)
@@ -55,7 +70,8 @@ fn parse_directory_entries(dir_data: &[u8]) -> Result<ElfFileInfo, String> {
     while offset < dir_data.len() {
         let entry_len = dir_data[offset] as usize;
         if entry_len == 0 {
-            offset += 1;
+            // Zero padding runs to the end of the current 2048-byte sector.
+            offset = (offset / SECTOR_SIZE as usize + 1) * SECTOR_SIZE as usize;
             continue;
         }
 

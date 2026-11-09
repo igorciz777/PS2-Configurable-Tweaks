@@ -175,9 +175,9 @@ export default function App() {
                       key={field.id}
                       title={field.label}
                       color={color}
-                      low={values[`${a}Low`] as number || 0}
-                      mid={values[`${a}Mid`] as number || 0.5}
-                      high={values[`${a}High`] as number || 1}
+                      low={(values[`${a}Low`] as number) ?? 0}
+                      mid={(values[`${a}Mid`] as number) ?? 0.5}
+                      high={(values[`${a}High`] as number) ?? 1}
                     />
                   );
                 })}

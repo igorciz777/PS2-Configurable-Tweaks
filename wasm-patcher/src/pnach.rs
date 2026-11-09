@@ -31,8 +31,8 @@ pub fn parse_pnach(pnach_text: &str) -> Result<Vec<PatchData>, String> {
 fn try_parse_line(line: &str) -> Option<PatchData> {
     // Format 1 (PCSX2): patch=0,EE,address,type,value
     if let Some(rest) = line.strip_prefix("patch=") {
-        let parts: Vec<&str> = rest.split(',').collect();
-        if parts.len() >= 4 {
+        let parts: Vec<&str> = rest.split(',').map(str::trim).collect();
+        if parts.len() >= 5 {
             let address_str = parts.get(2)?;
             let type_str = parts.get(3)?;
             let value_str = parts.get(4)?;
@@ -52,11 +52,11 @@ fn try_parse_line(line: &str) -> Option<PatchData> {
     if line.starts_with("patch") {
         let rest = line.strip_prefix("patch").unwrap_or(line);
         let rest = rest.strip_prefix(",").unwrap_or(rest);
-        let parts: Vec<&str> = rest.split(',').collect();
+        let parts: Vec<&str> = rest.split(',').map(str::trim).collect();
         if parts.len() >= 4 {
-            let address_str = parts.get(2)?;
-            let length_str = parts.get(3)?;
-            let data_str = parts.get(4)?;
+            let address_str = parts.get(1)?;
+            let length_str = parts.get(2)?;
+            let data_str = parts.get(3)?;
 
             let address = u32::from_str_hex(address_str).ok()?;
             let data_str = data_str.split('/').next()?;
@@ -97,12 +97,13 @@ trait FromStrHex {
 
 impl FromStrHex for u32 {
     fn from_str_hex(s: &str) -> Result<u32, std::num::ParseIntError> {
-        let s = s.trim();
-        if s.starts_with("0x") || s.starts_with("0X") {
-            u32::from_str_radix(&s[2..], 16)
-        } else {
-            u32::from_str_radix(s, 16)
-        }
+        // PCSX2 allows spaced byte groups like "00 00 d0 c0".
+        let cleaned: String = s.chars().filter(|c| !c.is_whitespace()).collect();
+        let hex = cleaned
+            .strip_prefix("0x")
+            .or_else(|| cleaned.strip_prefix("0X"))
+            .unwrap_or(cleaned.as_str());
+        u32::from_str_radix(hex, 16)
     }
 }
 

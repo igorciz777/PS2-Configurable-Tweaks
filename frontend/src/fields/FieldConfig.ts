@@ -55,7 +55,6 @@ export abstract class FieldConfig {
   abstract readonly author: string;
   abstract readonly help: string;
 
-  abstract getStateKeys(): string[];
   abstract getDefaults(): TweakValues;
   abstract generatePatches(values: TweakValues, activeCamera?: string, region?: string): PatchLine[];
 

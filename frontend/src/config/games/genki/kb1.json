@@ -3,6 +3,7 @@
   "label": "Kaido Battle 1 / TXR: Drift",
   "group": "Genki",
   "filename": "SLPM-65246_2046216F.pnach",
+  "_todo": "TODO: the steering, throttle and brake deadzone fields share midMinusLow/highMinusMid addresses, so only the last field's values survive. Give each axis its own addresses (needs verified game memory addresses).",
   "tabGroups": [
     {
       "path": "Deadzone",

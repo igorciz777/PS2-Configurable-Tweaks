@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+import { FieldCard } from './FieldCard';
+import { bodyStyle } from './fieldStyles';
 
 interface VectorInputProps {
   label: string;
@@ -18,35 +20,6 @@ const AXIS_COLORS: Record<string, string> = {
   X: '#e06060',
   Y: '#40c080',
   Z: '#4a7dff',
-};
-
-const cardStyle: React.CSSProperties = {
-  background: 'rgba(14,16,38,0.25)',
-  border: '1px solid rgba(80,90,160,0.08)',
-  borderRadius: '8px',
-  overflow: 'hidden',
-};
-
-const headerStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  padding: '10px 16px',
-};
-
-const labelStyle: React.CSSProperties = {
-  flex: 1,
-  fontSize: '0.75rem',
-  fontWeight: 500,
-  letterSpacing: '0.02em',
-  color: '#c0c4d8',
-};
-
-const bodyStyle: React.CSSProperties = {
-  padding: '12px 16px 16px',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
 };
 
 const axisRowStyle: React.CSSProperties = {
@@ -103,7 +76,10 @@ function AxisRow({
         max={max}
         step={step}
         value={value}
-        onChange={e => onChange(parseFloat(e.target.value) || 0)}
+        onChange={e => {
+          const v = parseFloat(e.target.value) || 0;
+          onChange(Math.min(Math.max(v, min), max));
+        }}
       />
     </div>
   );
@@ -114,16 +90,14 @@ export function VectorInput({
   x, y, z, onXChange, onYChange, onZChange,
 }: VectorInputProps) {
   return (
-    <div style={cardStyle}>
-      <div style={headerStyle}>
-        <span style={labelStyle}>{label}</span>
-        {helpEl}
-      </div>
-      <div style={bodyStyle}>
-        <AxisRow axis="X" value={x} min={min} max={max} step={step} onChange={onXChange} />
-        <AxisRow axis="Y" value={y} min={min} max={max} step={step} onChange={onYChange} />
-        <AxisRow axis="Z" value={z} min={min} max={max} step={step} onChange={onZChange} />
-      </div>
-    </div>
+    <FieldCard
+      label={label}
+      helpEl={helpEl}
+      bodyStyle={{ ...bodyStyle, display: 'flex', flexDirection: 'column', gap: '8px' }}
+    >
+      <AxisRow axis="X" value={x} min={min} max={max} step={step} onChange={onXChange} />
+      <AxisRow axis="Y" value={y} min={min} max={max} step={step} onChange={onYChange} />
+      <AxisRow axis="Z" value={z} min={min} max={max} step={step} onChange={onZChange} />
+    </FieldCard>
   );
 }

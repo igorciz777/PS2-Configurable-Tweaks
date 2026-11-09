@@ -3,11 +3,10 @@ import { PercentField, BooleanField, DeadzoneField, FloatField, IntegerField, Co
 import { PercentSlider } from './PercentSlider';
 import { CheckboxField } from './CheckboxField';
 import { DeadzoneGroup } from './DeadzoneGroup';
-import { FloatSlider } from './FloatSlider';
-import { IntegerSlider } from './IntegerSlider';
+import { SliderField } from './SliderField';
 import { ColorPickerField } from './ColorPicker';
 import { DropdownSelect } from './DropdownSelect';
-import { TransformFieldCard } from './TransformFieldCard';
+import { VectorInput } from './VectorInput';
 import { HelpIcon, HelpTooltip } from '../HelpTooltip';
 
 interface FieldRendererProps {
@@ -83,7 +82,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       const f = field as FloatField;
       const val = typeof values[f.id] === 'number' ? (values[f.id] as number) : f.default;
       return (
-        <FloatSlider
+        <SliderField
           label={f.label}
           helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
@@ -97,7 +96,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       const f = field as IntegerField;
       const val = typeof values[f.id] === 'number' ? (values[f.id] as number) : f.default;
       return (
-        <IntegerSlider
+        <SliderField
           label={f.label}
           helpEl={helpEl}
           min={f.min} max={f.max} step={f.step}
@@ -143,7 +142,7 @@ export function FieldRenderer({ field, values, onSetValue, getPercent, onUpdateP
       const yVal = typeof values[yKey] === 'number' ? (values[yKey] as number) : f.default[1];
       const zVal = typeof values[zKey] === 'number' ? (values[zKey] as number) : f.default[2];
       return (
-        <TransformFieldCard
+        <VectorInput
           label={f.label}
           helpEl={helpEl}
           min={f.min}

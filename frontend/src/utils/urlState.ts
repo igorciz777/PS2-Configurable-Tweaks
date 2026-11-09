@@ -48,5 +48,9 @@ export function writeUrlState(
   if (region) params.set('r', region);
   if (hasChanges) params.set('v', encodeValues(diff));
   const url = `${window.location.pathname}?${params.toString()}`;
-  window.history.replaceState(null, '', url);
+  try {
+    window.history.replaceState(null, '', url);
+  } catch {
+    // URL too long for the browser; keep working without persisting.
+  }
 }

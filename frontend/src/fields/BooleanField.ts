@@ -33,10 +33,6 @@ export class BooleanField extends FieldConfig {
     };
   }
 
-  getStateKeys(): string[] {
-    return [this.id];
-  }
-
   getDefaults(): TweakValues {
     return { [this.id]: this.default };
   }
